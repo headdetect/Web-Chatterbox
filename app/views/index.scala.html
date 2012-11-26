@@ -1,0 +1,38 @@
+@(userForm: Form[User])
+
+@import helper._
+@import helper.twitterBootstrap._
+
+@main(null) {
+   
+    @if(flash.containsKey("error")) {
+        
+        <div class="alert-message error">
+            <p>
+                <strong>Oops!</strong> @flash.get("error")
+            </p>
+        </div>
+        
+    }
+        
+    @helper.form(action = routes.Application.navigateChatRoom) { 
+	    <fieldset>
+	    	<legend>Sign In</legend>
+	    	
+				@inputText( 
+					userForm("username"), 
+					'_label -> "Username", 
+					'_help -> "Please choose a valid username.",
+					'class -> "input-small", 
+					'placeholder -> "JohnSmith"
+				)
+				
+			
+	    </fieldset>
+	    
+	    <div class="actions">
+            <input type="submit" class="btn primary" value="Sign In">
+        </div>
+    }
+    
+}
