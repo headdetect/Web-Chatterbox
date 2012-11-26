@@ -12,5 +12,5 @@ Chatterbox
 
 ##Contributing
 
-- All code must be formatted using my exported format. Import format in eclipse using [formatEclipse.xml](master/app/eclipseFormat.xml)
-- All classes must include sectioned comments that are found in [format.txt](master/app/format.txt)
+- All code must be formatted using my exported format. Import format in eclipse using [formatEclipse.xml](blob/master/app/eclipseFormat.xml)
+- All classes must include sectioned comments that are found in [format.txt](blob/master/app/format.txt)
