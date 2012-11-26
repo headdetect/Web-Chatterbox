@@ -10,3 +10,7 @@ Chatterbox
 - A shell should now appear. Type `eclipsify` if using eclipse. `idea` if using intellj. Netbeans is not supported.
 - After your project has been created. Type `play run`. This will start the server with the ChatterBox application.
 
+##Contributing
+
+- All code must be formatted using my exported format.
+- All classes must include sectioned comments that are found in [format.txt](blob/master/app/format.txt)
