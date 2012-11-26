@@ -13,4 +13,4 @@ Chatterbox
 ##Contributing
 
 - All code must be formatted using my exported format.
-- All classes must include sectioned comments that are found in [format.txt](blob/master/app/format.txt)
+- All classes must include sectioned comments that are found in [format.txt](app/format.txt)
