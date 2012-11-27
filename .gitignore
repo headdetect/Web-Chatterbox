@@ -20,3 +20,4 @@ server.pid
 *.iml
 *.eml
 /RUNNING_PID
+/run.bat

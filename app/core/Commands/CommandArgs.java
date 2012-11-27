@@ -23,7 +23,7 @@ public class CommandArgs {
 	// ===========================================================
 	
 	public CommandArgs(Talk talkData){
-		mUser = talkData.user;
+		mUser = talkData.getUser();
 		mArgs = split( talkData.text );
 	}
 	

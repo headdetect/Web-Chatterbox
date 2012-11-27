@@ -39,7 +39,7 @@ public class ChatRoom extends UntypedActor {
 		mUser.inSocket = in;
 
 		// Send the Join message to the room
-		String result = (String) Await.result( ask( defaultRoom , new Join( mUser ) , 1000 ) , Duration.create( 1 , SECONDS ) );
+		String result = (String) Await.result( ask( defaultRoom , new Join( mUser.ID ) , 1000 ) , Duration.create( 1 , SECONDS ) );
 
 		if ( "OK".equals( result ) ) {
 
@@ -48,7 +48,11 @@ public class ChatRoom extends UntypedActor {
 				@Override
 				public void invoke( JsonNode event ) {
 
-					mUser.sendMessage( event.get( "text" ).asText() );
+					if ( mUser.username != null ) {
+						mUser.tell( event.get( "text" ).asText() );
+					} else {
+						User.SYSTEM.tell( event.get( "text" ).asText() );
+					}
 
 				}
 			} );
@@ -81,16 +85,18 @@ public class ChatRoom extends UntypedActor {
 	public void onReceive( Object message ) throws Exception {
 
 		if ( message instanceof Join ) {
+			System.out.println( "Recieved join" );
 
 			// Received a Join message
 			Join join = (Join) message;
 
-			User.sendGlobalMessage( "join" , "System" , join.user.username + " joined the room" );
+			User.sendGlobalMessage( "join" , User.SYSTEM , join.getUser().username + " joined the room" );
 			User.sendListUpdate();
-			
+
 			getSender().tell( "OK" );
 
 		} else if ( message instanceof Talk ) {
+			System.out.println( "Recieved talk" );
 
 			// Received a Talk message
 			Talk talk = (Talk) message;
@@ -98,19 +104,21 @@ public class ChatRoom extends UntypedActor {
 			// TODO: Async Event calls
 
 			mRoboto.onChat( talk );
-			User.sendGlobalMessage( talk.user.username , talk.text );
+			User.sendGlobalMessage( talk.getUser() , talk.text );
 
 		} else if ( message instanceof Quit ) {
+			System.out.println( "Recieved quit" );
 
 			// Received a Quit message
 			Quit quit = (Quit) message;
 
-			User.removeUser( quit.user );
+			User.removeUser( quit.getUser() );
 
-			User.sendGlobalMessage( "quit" , "System" , quit.user.username + " left the room" );
+			User.sendGlobalMessage( "quit" , User.SYSTEM , quit.getUser().username + " left the room" );
 			User.sendListUpdate();
 
 		} else {
+			System.out.println( "Recieved unknown" );
 			unhandled( message );
 		}
 
@@ -120,32 +128,43 @@ public class ChatRoom extends UntypedActor {
 
 	public static class Join {
 
-		public final User user;
+		public final long user;
 
-		public Join( User username ) {
+		public Join( long username ) {
 			this.user = username;
 		}
-
+		
+		public User getUser (){
+			return User.findUserById( user );
+		}
 	}
 
 	public static class Talk {
 
-		public final User user;
+		public final long user;
 		public final String text;
 
-		public Talk( User username , String text ) {
+		public Talk( long username , String text ) {
 			this.user = username;
 			this.text = text;
+		}
+		
+		public User getUser (){
+			return User.findUserById( user );
 		}
 
 	}
 
 	public static class Quit {
 
-		public final User user;
+		public final long user;
 
-		public Quit( User username ) {
+		public Quit( long username ) {
 			this.user = username;
+		}
+		
+		public User getUser (){
+			return User.findUserById( user );
 		}
 
 	}

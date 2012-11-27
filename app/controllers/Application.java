@@ -61,6 +61,10 @@ public class Application extends Controller {
 	public static WebSocket< JsonNode > chat( final String ID ) {
 		final User mUser = User.findUserById( Long.valueOf( ID ) ) ;
 		
+		if(mUser == null){
+			return null;
+		}
+		
 		return new WebSocket< JsonNode >() {
 
 			// Called when the Websocket Handshake is done.

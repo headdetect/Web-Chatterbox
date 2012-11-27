@@ -2,6 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
@@ -24,6 +25,15 @@ public class User {
 
 	private static ArrayList< User > users = new ArrayList< User >();
 
+	// TODO: Replace with dynamically adjusting value based on user's past IDs
+	private static long currentID = 0;
+
+	public static User SYSTEM = new User( "System" );
+
+	static {
+		User.addUser( SYSTEM );
+	}
+
 	@Required
 	public String username;
 
@@ -42,11 +52,12 @@ public class User {
 	// ===========================================================
 
 	public User( String string ) {
+		this();
 		this.username = string;
 	}
 
 	public User() {
-
+		this.ID = currentID++;
 	}
 
 	// ===========================================================
@@ -61,25 +72,36 @@ public class User {
 	// Methods
 	// ===========================================================
 
-	public void sendMessage( String kind , String from , String asText ) {
+	public void sendMessage( String kind , User from , String asText ) {
+		if ( this == SYSTEM || outSocket == null ) {
+			// Just log the messages sent to the system
+
+			System.out.println( kind + " -> (" + from.username + "): " + asText );
+			return;
+		}
+
 		ObjectNode event = Json.newObject();
 		event.put( "kind" , kind );
-		event.put( "user" , from );
+		event.put( "user" , from.username );
 		event.put( "message" , asText );
 
 		outSocket.write( event );
 	}
 
-	public void sendMessage( String from , String asText ) {
+	public void sendMessage( User from , String asText ) {
 		sendMessage( "talk" , from , asText );
 	}
 
 	public void sendMessage( String text ) {
-		sendMessage( username , text );
+		sendMessage( this , text );
 	}
 
 	public void kick() {
-		ChatRoom.defaultRoom.tell( new ChatRoom.Quit( this ) );
+		ChatRoom.defaultRoom.tell( new ChatRoom.Quit( ID ) );
+	}
+
+	public void tell( String message ) {
+		ChatRoom.defaultRoom.tell( new ChatRoom.Talk( ID , message ) );
 	}
 
 	// -------- Utils ------------
@@ -107,9 +129,8 @@ public class User {
 	public static void addUser( User user ) {
 		users.add( user );
 
-		if ( Play.isDev() ) {
-			System.out.println( "New user added: " + user.username + ", ID=" + user.ID + ", IP=" + user.ipAddress );
-		}
+		System.out.println( "New user added: " + user.username + ", ID=" + user.ID + ", IP=" + user.ipAddress );
+
 	}
 
 	public static void removeUser( User user ) {
@@ -123,31 +144,37 @@ public class User {
 		return users;
 	}
 
-	public static void sendGlobalMessage( String kind , String from , String message ) {
+	public static void sendGlobalMessage( String kind , User from , String message ) {
 		for ( User user : users ) {
 			user.sendMessage( kind , from , message );
 		}
 	}
 
-	public static void sendGlobalMessage( String from , String msg ) {
+	public static void sendGlobalMessage( User from , String msg ) {
 		sendGlobalMessage( "talk" , from , msg );
 	}
 
 	public static void sendGlobalMessage( String message ) {
-		sendGlobalMessage( "System" , message );
+		sendGlobalMessage( User.SYSTEM , message );
 	}
 
 	public static void sendListUpdate() {
 		for ( User user : users ) {
-			ObjectNode event = Json.newObject();
-			event.put( "kind" , "membersUpdate");
-			
-			//Add all members to array node
-			ArrayNode mNode = event.putArray( "members" );
-			for(int i = 0; i < users.size(); i++){
-				mNode.add( users.get( i ).username );
+
+			if ( user == SYSTEM || user == Robot.mUser || user.outSocket == null ) {
+				// we don't care about the user list. k?
+				continue;
 			}
-			
+
+			ObjectNode event = Json.newObject();
+			event.put( "kind" , "membersUpdate" );
+
+			// Add all members to array node
+			ArrayNode mNode = event.putArray( "members" );
+			for ( int i = 0; i < users.size(); i++ ) {
+				mNode.add( StringEscapeUtils.escapeHtml( users.get( i ).username ) );
+			}
+
 			user.outSocket.write( event );
 		}
 

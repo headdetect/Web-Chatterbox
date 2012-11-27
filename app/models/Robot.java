@@ -13,7 +13,7 @@ public class Robot {
 
 	private ActorRef mChatRoom;
 
-	private final static User mUser = new User( "Robot" );
+	final static User mUser = new User( "Robot" );
 
 	public Robot( ActorRef chatRoom ) {
 
@@ -35,8 +35,10 @@ public class Robot {
 		mUser.outSocket = robotChannel;
 		
 		// Join the room
-		chatRoom.tell( new ChatRoom.Join( mUser ) );
+		chatRoom.tell( new ChatRoom.Join( mUser.ID ) );
 		mChatRoom = chatRoom;
+		
+		User.addUser( mUser );
 	}
 
 	public void onChat( Talk talk ) {
@@ -45,7 +47,8 @@ public class Robot {
 		/*
 		 * We Don't want any echos now do we.
 		 */
-		if ( talk.user == mUser ) {
+		if ( talk.getUser() == mUser ) {
+			System.out.println("Robot recieved echo");
 			return;
 		}
 
@@ -54,7 +57,7 @@ public class Robot {
 		}
 
 		if ( message.equals( "hi mr robot" ) || message.equalsIgnoreCase( "hi robot" ) ) {
-			reply( "Hi " + talk.user.username + "!" );
+			reply( "Hi " + talk.getUser().username + "!" );
 			return;
 		}
 
@@ -79,11 +82,11 @@ public class Robot {
 	private void handleCommand( Talk talk , String query ) {
 
 		if ( query.contains( "who am i" ) ) {
-			reply( "I believe you are " + talk.user.username );
+			reply( "I believe you are " + talk.getUser().username );
 		} else if ( query.contains( "i am your father" ) || query.contains( "i am ur father" ) ) {
 			reply( "NOOOOOOOO" );
 		} else if ( query.contains( "what is my ip" ) ) {
-			reply( "Looks like your IP is " + talk.user.ipAddress + ". But I could be wrong." );
+			reply( "Looks like your IP is " + talk.getUser().ipAddress + ". But I could be wrong." );
 		} else {
 			String cleaned = query.replace( "+" , "%2B" ).replace( ' ' , '+' );
 			reply( "<a href=\"http://lmgtfy.com/?q=" + cleaned + "\">I don't know what to say to that </a>" );
@@ -92,7 +95,7 @@ public class Robot {
 
 	private void reply( String message ) {
 		if ( mChatRoom != null && message != null ) {
-			mChatRoom.tell( new ChatRoom.Talk( mUser , message ) );
+			mChatRoom.tell( new ChatRoom.Talk( mUser.ID , message ) );
 		}
 	}
 
