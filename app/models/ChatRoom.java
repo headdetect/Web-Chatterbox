@@ -7,7 +7,10 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
 import events.EventSystem;
-import events.talk.onTalkEvent;
+import events.chatroom.onJoinEvent;
+import events.chatroom.onQuitEvent;
+import events.chatroom.onTalkEvent;
+import events.chatroom.onUnhandledMessageEvent;
 
 import play.libs.Akka;
 import play.libs.F.Callback;
@@ -100,6 +103,14 @@ public class ChatRoom extends UntypedActor {
 
 			// Received a Join message
 			Join join = (Join) message;
+			
+			onJoinEvent event = new onJoinEvent(join);
+			events.callEvent( event );
+			
+			if ( event.isCancelled() ) {
+				( (Join) message ).getUser().kick();
+				return;
+			}
 
 			User.sendGlobalMessage( "join" , User.SYSTEM , join.getUser().username + " joined the room" );
 			User.sendListUpdate();
@@ -124,6 +135,9 @@ public class ChatRoom extends UntypedActor {
 
 			// Received a Quit message
 			Quit quit = (Quit) message;
+			
+			onQuitEvent event = new onQuitEvent( quit );
+			events.callEvent( event );
 
 			User.removeUser( quit.getUser() );
 
@@ -132,6 +146,12 @@ public class ChatRoom extends UntypedActor {
 
 		} else {
 			System.out.println( "Recieved unknown" );
+			
+			onUnhandledMessageEvent event = new onUnhandledMessageEvent( message );
+			events.callEvent( event );
+			if ( event.isCancelled() )
+				return;
+			
 			unhandled( message );
 		}
 

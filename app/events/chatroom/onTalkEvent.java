@@ -1,4 +1,4 @@
-package events.talk;
+package events.chatroom;
 
 import models.ChatRoom.Talk;
 import events.Cancelable;

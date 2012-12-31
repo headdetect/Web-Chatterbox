@@ -7,7 +7,7 @@ import org.codehaus.jackson.JsonNode;
 import events.EventHandler;
 import events.Listener;
 import events.Priority;
-import events.talk.onTalkEvent;
+import events.chatroom.onTalkEvent;
 
 import play.Logger;
 import play.libs.Json;

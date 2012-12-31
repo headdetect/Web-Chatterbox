@@ -1,0 +1,39 @@
+package events.chatroom;
+
+import models.ChatRoom.Join;
+import events.Cancelable;
+import events.Event;
+import events.EventList;
+
+public class onJoinEvent extends Event implements Cancelable {
+	
+	private static EventList events = new EventList();
+	private Join join;
+	private boolean cancel;
+	
+	public onJoinEvent( Join join ) { this.join = join; }
+	
+	public Join getJoinModel() {
+		return join;
+	}
+	
+	public static EventList getEventList() {
+		return events;
+	}
+	
+	@Override
+	public EventList getEvents() {
+		return events;
+	}
+
+	@Override
+	public boolean isCancelled() {
+		return cancel;
+	}
+
+	@Override
+	public void setCancel( boolean cancel ) {
+		this.cancel = cancel;
+	}
+
+}
