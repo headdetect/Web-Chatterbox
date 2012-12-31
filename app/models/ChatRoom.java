@@ -116,8 +116,7 @@ public class ChatRoom extends UntypedActor {
 			events.callEvent( event );
 			if ( event.isCancelled() )
 				return;
-
-			mRoboto.onChat( talk );
+			
 			User.sendGlobalMessage( talk.getUser() , talk.text );
 
 		} else if ( message instanceof Quit ) {

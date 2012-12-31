@@ -4,12 +4,17 @@ import models.ChatRoom.Talk;
 
 import org.codehaus.jackson.JsonNode;
 
+import events.EventHandler;
+import events.Listener;
+import events.Priority;
+import events.talk.onTalkEvent;
+
 import play.Logger;
 import play.libs.Json;
 import play.mvc.WebSocket;
 import akka.actor.ActorRef;
 
-public class Robot {
+public class Robot implements Listener {
 
 	private ActorRef mChatRoom;
 
@@ -39,9 +44,12 @@ public class Robot {
 		mChatRoom = chatRoom;
 		
 		User.addUser( mUser );
+		ChatRoom.events.registerEvents( this );
 	}
-
-	public void onChat( Talk talk ) {
+	
+	@EventHandler(priority = Priority.High)
+	public void onChat( onTalkEvent event ) {
+		final Talk talk = event.getTalk();
 		String message = talk.text.toLowerCase();
 
 		/*
@@ -76,7 +84,6 @@ public class Robot {
 			String query = message.substring( message.indexOf( "hey robot" ) , message.length() );
 			handleCommand( talk , query );
 		}
-
 	}
 
 	private void handleCommand( Talk talk , String query ) {
