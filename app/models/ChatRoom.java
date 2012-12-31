@@ -6,6 +6,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
+import events.EventSystem;
+import events.talk.onTalkEvent;
+
 import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
@@ -25,10 +28,13 @@ public class ChatRoom extends UntypedActor {
 	public static final Robot mRoboto;
 
 	public static final ActorRef defaultRoom;
+	
+	public static final EventSystem events;
 
 	static {
 		defaultRoom = Akka.system().actorOf( new Props( ChatRoom.class ) );
 		mRoboto = new Robot( defaultRoom );
+		events = new EventSystem();
 	}
 
 	/**
@@ -106,7 +112,10 @@ public class ChatRoom extends UntypedActor {
 			// Received a Talk message
 			Talk talk = (Talk) message;
 
-			// TODO: Async Event calls
+			onTalkEvent event = new onTalkEvent(talk);
+			events.callEvent( event );
+			if ( event.isCancelled() )
+				return;
 
 			mRoboto.onChat( talk );
 			User.sendGlobalMessage( talk.getUser() , talk.text );
