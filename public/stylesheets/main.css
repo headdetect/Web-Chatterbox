@@ -1,15 +1,21 @@
 html, body {
     background-color: #eee;
+    height: 100%;
 }
 body {
     padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+    height: 100%;
+    
+    overflow: hidden;
 }
 .container > footer p {
     text-align: center; /* center align it with the container */
 }
+
 .container {
-    width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+    width: 70%;
 }
+
 
 /* The white background content wrapper */
 .content {
@@ -22,40 +28,43 @@ body {
     -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
        -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
             box-shadow: 0 1px 2px rgba(0,0,0,.15);
-    min-height: 10px;
+    
+	
 }
 
 /* Page header tweaks */
 .page-header {
+	position: fixed;
+	width: 100%;
+	top: 20px;
+	
     background-color: #f5f5f5;
-    padding: 20px 20px 10px;
-    margin: -20px -20px 20px;
+    
+    -webkit-box-shadow: 0 0 2px 2px rgba(0,0,0,.15);
+       -moz-box-shadow: 0 0 2px 2px rgba(0,0,0,.15);
+            box-shadow: 0 0 2px 2px rgba(0,0,0,.15);
+            
+    z-index: 1;
 }
 
-/* Styles you shouldn't keep as they are for displaying this base example only */
-.content .span10,
-.content .span4 {
-    min-height: 500px;
+.page-header h4,
+.page-header #prog {
+	padding-top: 15px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 5px
 }
 
-/* Give a quick and non-cross-browser friendly divider */
-.content .span4 {
-    padding-left: 9px;
-    margin-left: 10px;
-    border-left: 1px solid #eee;
+#chat-container {
+	position: absolute;
+	bottom: 60px;
+	left: 0px; 
+	right: 260px;
+	top: 110px;
+	
+	overflow-y: scroll;
 }
 
-.topbar .btn {
-    border: 0;
-}
-
-.topbar p {
-    color: #888;
-}
-
-#username {
-    width: 200px;
-}
 
 #main {
     position: relative;
@@ -64,30 +73,65 @@ body {
 
 #onError, #onChat {
     display: none;
+    overflow: auto;
 }
 
-#messages {
-    position: absolute;
-    bottom: 60px;
+#members {
+	overflow-y: auto;
 }
 
-#talk {
-    position: absolute;
+#members-col {
+	position: fixed;
+	width: 260px;
+	right: 0;
+	top: 110px;
+	bottom: 0;
+	
+	
+	background-color: #eee;
+	
+}
+
+
+#chatarea {
+    position: fixed;
     bottom: 0;
     left: 0;
-    right: 0;
-    width: auto;
-    height: 40px
+    right: 260px;
+    
+    height: 50px;
+    
+    background: #ccc;
+    
+    padding: 5px;
 }
 
-.message {
-    padding: 4px 0;
-    border-bottom: 1px solid #eee;
-    position: relative;
+#chatarea textarea {
+	position: absolute;
+	width: 89.5%;
 }
 
-.message span {
-    width: 70px;
+#chatarea button {
+	position: absolute;
+	right: 5px;
+	width: 8%;
+	height: 48px;
+	
+	
+}
+
+
+/* Message stuffs */
+
+.message-line {
+    padding: 6px 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 0;
+    
+}
+
+.message-line span {
+    width: 100px;
     overflow: hidden;
     text-align: right;
     font-weight: bold;
@@ -98,16 +142,76 @@ body {
     top: -1px;
 }
 
-.message p {
-    display: inline-block;
+.message-line p {
+	display: inline-block;
     margin: 0;
-    width: 500px;
+    max-width: 50%;
+    word-break: break-all;
 }
 
-.message.me {
-    background: #FFC;
+.message-line small {
+	float: right;
+	padding-right: 8px;
 }
 
-.message.join, .message.quit {
-    background: #D9E7FB;
+
+.message-line.me {
+    background: #E8E8FF;
+}
+
+
+.message-line.join, .message-line.quit {
+    background: #f3f3f3;
+    color: #999;
+}
+
+/* Tweak navbar brand link to be pimp.
+-------------------------------------------------- */
+
+body > .navbar {
+  font-size: 13px;
+}
+
+body > .navbar .brand {
+  padding-right: 0;
+  padding-left: 0;
+  margin-left: 20px;
+  float: right;
+  font-weight: bold;
+  color: #ccc;
+  text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
+  -webkit-transition: all .2s linear;
+     -moz-transition: all .2s linear;
+          transition: all .2s linear;
+}
+body > .navbar .brand:hover {
+  text-decoration: none;
+  text-shadow: 0 1px 0 rgba(100,255,100,.1), 0 0 30px rgba(100,255,100,.7);
+}
+
+/* Signin page goodness */
+
+.fieldset-signin {
+        max-width: 300px;
+        padding: 19px 29px 29px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.fieldset-signin .fieldset-signin-heading,
+.fieldset-signin .checkbox {
+        margin-bottom: 10px;
+}
+
+.fieldset-signin input[type="text"],
+.fieldset-signin input[type="password"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 5px;
+        padding: 7px 9px;
 }

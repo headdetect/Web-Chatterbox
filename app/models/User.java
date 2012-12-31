@@ -7,8 +7,6 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 
-import play.Play;
-import play.data.validation.Constraints.Required;
 import play.libs.Json;
 import play.mvc.WebSocket;
 import core.User.Permission;
@@ -34,8 +32,9 @@ public class User {
 		User.addUser( SYSTEM );
 	}
 
-	@Required
 	public String username;
+	
+	public String password;
 
 	public long ID;
 

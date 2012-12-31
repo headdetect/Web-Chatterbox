@@ -1,7 +1,6 @@
 @(userForm: Form[User])
 
 @import helper._
-@import helper.twitterBootstrap._
 
 @main(null) {
    
@@ -14,25 +13,42 @@
         </div>
         
     }
-        
-    @helper.form(action = routes.Application.navigateChatRoom) { 
+     
+    @helper.form(action = routes.Chat.verify, 'class -> "fieldset-signin") { 
 	    <fieldset>
 	    	<legend>Sign In</legend>
-	    	
-				@inputText( 
+				@helper.inputText( 
 					userForm("username"), 
-					'_label -> "Username", 
-					'_help -> "Please choose a valid username.",
-					'class -> "input-small", 
-					'placeholder -> "JohnSmith"
+					'_label -> "",
+					'class -> "input-block-level", 
+					'placeholder -> "Username"
+				)
+				
+				@helper.inputPassword( 
+					userForm("password"), 
+					'_label -> "",
+					'class -> "input-block-level", 
+					'placeholder -> "Password"
 				)
 				
 			
 	    </fieldset>
 	    
 	    <div class="actions">
-            <input type="submit" class="btn primary" value="Sign In">
+            <input type="submit" class="btn btn-primary" value="Sign In">
         </div>
     }
+    
+    <style type="text/css">
+    
+    	/* Makes for a nice image thingy */
+    	
+		html, body {
+		    background: url(@routes.Assets.at("images/bg.jpg"));
+		    background-size: 100%;
+		}
+		
+		
+    </style>
     
 }

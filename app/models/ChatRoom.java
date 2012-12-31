@@ -83,6 +83,11 @@ public class ChatRoom extends UntypedActor {
 
 	@Override
 	public void onReceive( Object message ) throws Exception {
+		
+		if( message == null ) {
+			System.out.println("Null message recieved");
+			return;
+		}
 
 		if ( message instanceof Join ) {
 			System.out.println( "Recieved join" );
