@@ -7,7 +7,7 @@ import events.EventList;
 
 public class onJoinEvent extends Event implements Cancelable {
 	
-	private static EventList events = new EventList();
+	private static final EventList events = new EventList();
 	private Join join;
 	private boolean cancel;
 	

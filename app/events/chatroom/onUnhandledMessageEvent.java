@@ -8,7 +8,7 @@ public class onUnhandledMessageEvent extends Event implements Cancelable {
 
 	private Object message;
 	private boolean cancel;
-	private static EventList events = new EventList();
+	private static final EventList events = new EventList();
 	
 	public onUnhandledMessageEvent( Object message ) { this.message = message; }
 	

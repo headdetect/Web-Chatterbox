@@ -6,7 +6,7 @@ import events.EventList;
 
 public class onQuitEvent extends Event {
 
-	private static EventList events = new EventList();
+	private static final EventList events = new EventList();
 	private Quit quit;
 	
 	public onQuitEvent( Quit data ) { this.quit = data; }
