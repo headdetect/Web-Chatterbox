@@ -1,4 +1,4 @@
-package core.User;
+package chatterbox.core.user;
 
 public enum Permission {
 

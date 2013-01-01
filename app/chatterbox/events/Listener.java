@@ -1,4 +1,4 @@
-package events;
+package chatterbox.events;
 
 public interface Listener { }
 

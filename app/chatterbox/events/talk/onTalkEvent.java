@@ -1,9 +1,9 @@
-package events.talk;
+package chatterbox.events.talk;
 
+import chatterbox.events.Cancelable;
+import chatterbox.events.Event;
+import chatterbox.events.EventList;
 import models.ChatRoom.Talk;
-import events.Cancelable;
-import events.Event;
-import events.EventList;
 
 public class onTalkEvent extends Event implements Cancelable {
 

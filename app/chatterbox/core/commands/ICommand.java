@@ -1,4 +1,4 @@
-package core.Commands;
+package chatterbox.core.commands;
 
 import models.User;
 

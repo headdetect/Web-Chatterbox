@@ -7,9 +7,10 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
 
+import chatterbox.core.user.Permission;
+
 import play.libs.Json;
 import play.mvc.WebSocket;
-import core.User.Permission;
 
 public class User {
 

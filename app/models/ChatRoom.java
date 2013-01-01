@@ -6,8 +6,11 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
-import events.EventSystem;
-import events.talk.onTalkEvent;
+import chatterbox.events.EventSystem;
+import chatterbox.events.talk.onTalkEvent;
+import chatterbox.utils.Logger;
+import chatterbox.utils.Logger.Log;
+
 
 import play.libs.Akka;
 import play.libs.F.Callback;
@@ -91,7 +94,7 @@ public class ChatRoom extends UntypedActor {
 	public void onReceive( Object message ) throws Exception {
 		
 		if( message == null ) {
-			System.out.println("Null message recieved");
+			Logger.instance.log( "Recieved null message", Log.LOG_LEVEL_WARNING );
 			return;
 		}
 

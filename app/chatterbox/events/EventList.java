@@ -1,4 +1,4 @@
-package events;
+package chatterbox.events;
 
 import java.util.*;
 import java.util.Map.Entry;

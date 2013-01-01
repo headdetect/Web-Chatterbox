@@ -1,4 +1,4 @@
-package events;
+package chatterbox.events;
 
 public class RegisteredListener {
     private Listener listen;

@@ -6,10 +6,8 @@
    
     @if(flash.containsKey("error")) {
         
-        <div class="alert-message error">
-            <p>
+        <div class="alert alert-error">
                 <strong>Oops!</strong> @flash.get("error")
-            </p>
         </div>
         
     }

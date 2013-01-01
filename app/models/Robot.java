@@ -4,10 +4,11 @@ import models.ChatRoom.Talk;
 
 import org.codehaus.jackson.JsonNode;
 
-import events.EventHandler;
-import events.Listener;
-import events.Priority;
-import events.talk.onTalkEvent;
+import chatterbox.events.EventHandler;
+import chatterbox.events.Listener;
+import chatterbox.events.Priority;
+import chatterbox.events.talk.onTalkEvent;
+
 
 import play.Logger;
 import play.libs.Json;

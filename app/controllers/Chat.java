@@ -39,7 +39,12 @@ public class Chat extends Controller {
 		}
 
 		if ( user.username == null || user.username.trim().equals( "" ) ) {
-			flash( "error" , "Please choose a valid username." );
+			flash( "error" , "Please enter a valid username." );
+			return badRequest( index.render( mForm ) );
+		}
+		
+		if ( user.password == null || user.password.trim().equals( "" ) ) {
+			flash( "error" , "Please enter a valid password." );
 			return badRequest( index.render( mForm ) );
 		}
 		

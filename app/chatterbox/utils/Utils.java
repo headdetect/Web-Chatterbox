@@ -1,4 +1,4 @@
-package utils;
+package chatterbox.utils;
 
 /**
  * The Class Utils.

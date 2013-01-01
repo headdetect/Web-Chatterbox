@@ -1,5 +1,5 @@
 
-package core.Commands;
+package chatterbox.core.commands;
 
 import models.ChatRoom.Talk;
 import models.User;
