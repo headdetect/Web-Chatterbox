@@ -4,16 +4,14 @@ import models.ChatRoom.Talk;
 
 import org.codehaus.jackson.JsonNode;
 
-import chatterbox.events.EventHandler;
-import chatterbox.events.Listener;
-import chatterbox.events.Priority;
-import chatterbox.events.talk.onTalkEvent;
-
-
 import play.Logger;
 import play.libs.Json;
 import play.mvc.WebSocket;
 import akka.actor.ActorRef;
+import chatterbox.events.EventHandler;
+import chatterbox.events.Listener;
+import chatterbox.events.Priority;
+import chatterbox.events.talk.onTalkEvent;
 
 public class Robot implements Listener {
 

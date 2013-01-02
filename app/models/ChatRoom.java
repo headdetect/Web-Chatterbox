@@ -6,12 +6,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ObjectNode;
 
-import chatterbox.events.EventSystem;
-import chatterbox.events.talk.onTalkEvent;
-import chatterbox.utils.Logger;
-import chatterbox.utils.Logger.Log;
-
-
 import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
@@ -22,7 +16,14 @@ import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.dispatch.Await;
 import akka.util.Duration;
-
+import chatterbox.events.EventSystem;
+import chatterbox.events.onJoinEvent;
+import chatterbox.events.onQuitEvent;
+import chatterbox.events.onUnhandledMessageEvent;
+import chatterbox.events.talk.onTalkEvent;
+import chatterbox.utils.Logger;
+import chatterbox.utils.Logger.Log;
+ 
 /**
  * A chat room is an Actor.
  */
@@ -103,6 +104,14 @@ public class ChatRoom extends UntypedActor {
 
 			// Received a Join message
 			Join join = (Join) message;
+			
+			onJoinEvent event = new onJoinEvent(join);
+			events.callEvent( event );
+			
+			if ( event.isCancelled() ) {
+				( (Join) message ).getUser().kick();
+				return;
+			}
 
 			User.sendGlobalMessage( "join" , User.SYSTEM , join.getUser().username + " joined the room" );
 			User.sendListUpdate();
@@ -127,6 +136,9 @@ public class ChatRoom extends UntypedActor {
 
 			// Received a Quit message
 			Quit quit = (Quit) message;
+			
+			onQuitEvent event = new onQuitEvent( quit );
+			events.callEvent( event );
 
 			User.removeUser( quit.getUser() );
 
@@ -135,6 +147,12 @@ public class ChatRoom extends UntypedActor {
 
 		} else {
 			System.out.println( "Recieved unknown" );
+			
+			onUnhandledMessageEvent event = new onUnhandledMessageEvent( message );
+			events.callEvent( event );
+			if ( event.isCancelled() )
+				return;
+			
 			unhandled( message );
 		}
 
