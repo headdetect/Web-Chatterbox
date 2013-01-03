@@ -1,4 +1,4 @@
-package chatterbox.events.talk;
+package chatterbox.events.chatroom;
 
 import chatterbox.events.Cancelable;
 import chatterbox.events.Event;

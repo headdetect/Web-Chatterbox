@@ -11,7 +11,7 @@ import akka.actor.ActorRef;
 import chatterbox.events.EventHandler;
 import chatterbox.events.Listener;
 import chatterbox.events.Priority;
-import chatterbox.events.talk.onTalkEvent;
+import chatterbox.events.chatroom.onTalkEvent;
 
 public class Robot implements Listener {
 

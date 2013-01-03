@@ -1,5 +1,8 @@
-package chatterbox.events;
+package chatterbox.events.chatroom;
 
+import chatterbox.events.Cancelable;
+import chatterbox.events.Event;
+import chatterbox.events.EventList;
 import models.ChatRoom.Join;
 
 public class onJoinEvent extends Event implements Cancelable {

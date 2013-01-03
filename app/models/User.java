@@ -1,16 +1,14 @@
 package models;
 
-import java.util.ArrayList;
-
-import org.apache.commons.lang.StringEscapeUtils;
+import chatterbox.core.user.Permission;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
-
-import chatterbox.core.user.Permission;
-
 import play.libs.Json;
 import play.mvc.WebSocket;
+
+import java.util.ArrayList;
 
 public class User {
 
@@ -172,7 +170,7 @@ public class User {
 			// Add all members to array node
 			ArrayNode mNode = event.putArray( "members" );
 			for ( int i = 0; i < users.size(); i++ ) {
-				mNode.add( StringEscapeUtils.escapeHtml( users.get( i ).username ) );
+				mNode.add( StringEscapeUtils.escapeHtml4(users.get(i).username) );
 			}
 
 			user.outSocket.write( event );

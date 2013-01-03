@@ -1,4 +1,8 @@
-package chatterbox.events;
+package chatterbox.events.chatroom;
+
+import chatterbox.events.Cancelable;
+import chatterbox.events.Event;
+import chatterbox.events.EventList;
 
 
 public class onUnhandledMessageEvent extends Event implements Cancelable {

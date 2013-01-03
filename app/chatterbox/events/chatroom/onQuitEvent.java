@@ -1,5 +1,7 @@
-package chatterbox.events;
+package chatterbox.events.chatroom;
 
+import chatterbox.events.Event;
+import chatterbox.events.EventList;
 import models.ChatRoom.Quit;
 
 public class onQuitEvent extends Event {

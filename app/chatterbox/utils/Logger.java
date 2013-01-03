@@ -34,7 +34,7 @@ public class Logger implements Runnable {
 	
 	private final DateFormat dateFormat = new SimpleDateFormat( "yyyy/MM/dd HH:mm:ss" );
 
-	private String filepath;
+	private String filePath;
 
 	private PrintWriter out;
 
@@ -51,10 +51,10 @@ public class Logger implements Runnable {
 	/**
 	 * Create a new instance of Logger.
 	 *
-	 * @param filepath The filepath of the log file
+	 * @param filePath The filePath of the log file
 	 */
-	Logger( String filepath ) {
-		this.filepath = filepath;
+	Logger( String filePath) {
+		this.filePath = filePath;
 	}
 
 	static {
@@ -65,11 +65,11 @@ public class Logger implements Runnable {
         cal.clear(Calendar.MILLISECOND);
         instance = new Logger("logs/" + cal.getTime() + ".txt");
         String filename = cal.getTime().toString().replace(" ", "-");
-        String finalname = filename.split("-")[0] + "-" + filename.split("-")[1] + "-" + filename.split("-")[2];
+        String finalName = filename.split("-")[0] + "-" + filename.split("-")[1] + "-" + filename.split("-")[2];
         try {
-            instance.changeFilePath("logs/" + finalname + ".txt");
+            instance.changeFilePath("logs/" + finalName + ".txt");
         } catch (IOException e2) {
-            System.out.println("logs/" + finalname + ".txt");
+            System.out.println("logs/" + finalName + ".txt");
             e2.printStackTrace();
         }
         
@@ -214,18 +214,18 @@ public class Logger implements Runnable {
 	}
 
 	/**
-	 * Change the filepath of the log file
+	 * Change the filePath of the log file
 	 * 
 	 * @param newpath
-	 *            The new filepath
+	 *            The new filePath
 	 * @throws IOException
 	 */
 	public void changeFilePath( String filename ) throws IOException {
-		this.filepath = filename;
+		this.filePath = filename;
 		if ( out != null )
 			out.close();
-		FileUtils.createIfNotExist( filepath );
-		out = new PrintWriter( filepath );
+		FileUtils.createIfNotExist(filePath);
+		out = new PrintWriter(filePath);
 	}
 
 	// ===========================================================
