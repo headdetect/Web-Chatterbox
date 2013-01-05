@@ -1,6 +1,7 @@
+@import url(http://fonts.googleapis.com/css?family=Lato);
+
 html, body {
     background-color: #eee;
-    height: 100%;
 }
 body {
     padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
@@ -49,10 +50,7 @@ body {
 
 .page-header h4,
 .page-header #prog {
-	padding-top: 15px;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-bottom: 5px
+    padding: 15px 10px 5px 10px;
 }
 
 #chat-container {
@@ -120,33 +118,134 @@ body {
 	
 }
 
+#chat-list .message-line {
+    padding: 0;
+    margin: 0;
 
-/* Message stuffs */
+    position: relative;
 
-.message-line {
-    padding: 6px 0;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 0;
-    
+    border-color: inherit;
+    border-collapse: inherit;
+
 }
 
-.message-line span {
-    width: 100px;
+#chat-list .message-line table td,
+#chat-list .message-line table th {
+    border-top: inherit;
+}
+
+#chat-list .message-line .usr {
+    position: absolute;
+    left: -16px;
+    top: 0;
+
+    width: 150px;
     overflow: hidden;
-    text-align: right;
-    font-weight: bold;
-    margin-right: 5px;
+
     display: inline-block;
     vertical-align: top;
+    text-align: right;
+
+    font-family: "Lucida Grande", arial ,sans-serif;
+    font-weight: bold;
+    color: #444;
+    font-size: .9em;
+
+    border-right: 1px solid #fdfdfd;
+
+    background: #f3f3f3;
+}
+
+#chat-list .message-line .msg {
+    position: absolute;
+    left: 151px;
+    right: 0;
+    top: 0;
+
+    display: inline-block;
+    margin: 0;
+    word-break: break-all;
+
+    border-left: 1px solid #ddd;
+    background: #fff;
+
+}
+
+#chat-list .message-line .time {
+
+    right: 20px;
+    top: 0;
+
+    display: inline-block;
+
+    background: transparent;
+
+}
+
+#chat-list .message-line.me .usr {
+    border-right: 1px solid #EFEBF5;
+    border-top: 1px solid #D8D3DE;
+    background: #E8E1F0;
+}
+
+#chat-list .message-line.me .msg {
+    border-left: 1px solid #D8D3DE;
+    background: #F4F0FA;
+}
+
+
+/* Message stuffs
+
+.message-line {
+    padding: 0;
+    margin: 0;
+
+    height: auto;
+
+    border-top: 1px solid #bbb;
+
     position: relative;
-    top: -1px;
+}
+
+/* Author of message
+.message-line span {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 150px;
+    overflow: hidden;
+
+    text-align: right;
+
+    display: inline-block;
+    vertical-align: top;
+
+    font-family: "Lato";
+    font-weight: bold;
+
+    border-right: 1px solid #fdfdfd;
+    border-top: 1px solid #fdfdfd;
+
+    background: #f3f3f3;
+
 }
 
 .message-line p {
+    position: absolute;
+    left: 151px;
+    right: 0;
+    top: 0;
+
 	display: inline-block;
     margin: 0;
-    max-width: 50%;
     word-break: break-all;
+
+    border-left: 1px solid #bbb;
+    background: #fff;
+
+    padding: 10px;
+
 }
 
 .message-line small {
@@ -156,14 +255,27 @@ body {
 
 
 .message-line.me {
-    background: #E8E8FF;
+    border-top: 1px solid #D8D3DE;
+}
+
+.message-line.me span {
+    border-right: 1px solid #EFEBF5;
+    border-top: 1px solid #EFEBF5;
+
+    background: #E8E1F0;
+
+
+}
+
+.message-line.me p {
+    border-left: 1px solid #D8D3DE;
+
+    background: #F4F0FA;
 }
 
 
-.message-line.join, .message-line.quit {
-    background: #f3f3f3;
-    color: #999;
-}
+*/
+
 
 /* Tweak navbar brand link to be pimp.
 -------------------------------------------------- */

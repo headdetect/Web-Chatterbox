@@ -110,7 +110,7 @@ public class ChatRoom extends UntypedActor {
 				return;
 			}
 
-			User.sendGlobalMessage( "join", User.SYSTEM, join.getUser().username + " joined the room" );
+			User.sendGlobalMessage( "join", User.SYSTEM, join.getUser().username + " joined the room");
 			User.sendListUpdate();
 
 			getSender().tell( "OK" );
@@ -127,7 +127,7 @@ public class ChatRoom extends UntypedActor {
 				if ( event.isCancelled() )
 					return;
 
-				User.sendGlobalMessage( talk.getUser(), talk.text );
+				User.sendGlobalMessage( "talk", talk.getUser(), talk.text, talk.options );
 
 			} else
 				if ( message instanceof Quit ) {
@@ -174,12 +174,14 @@ public class ChatRoom extends UntypedActor {
 
 	public static class Talk {
 
-		public final long user;
-		public final String text;
+		public long user;
+		public String text;
+		public Object[] options = new Object[0];
 
-		public Talk ( long username, String text ) {
+		public Talk ( long username, String text, Object... options ) {
 			this.user = username;
 			this.text = text;
+			this.options = options;
 		}
 
 		public User getUser () {
