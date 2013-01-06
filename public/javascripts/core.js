@@ -1,107 +1,176 @@
-$( function() {
-    var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
-    var chatSocket = new WS(sock);
+!function ($) {
+
+    "use strict"; // jshint ;_;
 
 
-    var sendMessage = function() {
-        chatSocket.send(JSON.stringify(
-            {text: $("#txt-chat").val()}
-        ))
-        $("#txt-chat").val('')
-        $("#chat-container").animate( { scrollTop: $("#chat-container").height() }, "fast" );
+    $(function () {
 
-    }
 
-    var receiveEvent = function(event) {
-        var data = JSON.parse(event.data)
+        var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
+        var chatSocket = new WS(sock);
 
-        $("#prog").hide();
+        var sendMessage = function () {
+            chatSocket.send(JSON.stringify(
+                {text: $("#txt-chat").val()}
+            ));
+            $("#txt-chat").val('');
+            $("#chat-container").animate({ scrollTop: $("#chat-container").height() }, "fast");
 
-        // Handle errors
-        if(data.error) {
+        };
 
-            //Close socket
-            chatSocket.close()
+        var receiveEvent = function (event) {
+            var data = JSON.parse(event.data);
 
-            $("#onError span").text(data.error)
-            $("#onError").show()
-            return
-        } else {
-            $("#chat-container").show();
-            $("#members-col").show();
-            $("#chatarea").show();
+            $("#prog").hide();
 
-        }
+            // Handle errors
+            if (data.error) {
 
-        if( data.kind == "membersUpdate") {
-            // Update the members list
-            $("#members").html('')
-            $(data.members).each(function() {
-                $("#members").append('<tr><td>' + this + '</td></tr>')
+                //Close socket
+                chatSocket.close();
+
+                $("#onError span").text(data.error);
+                $("#onError").show();
+            } else {
+                $("#chat-container").show();
+                $("#members-col").show();
+                $("#chatarea").show();
+            }
+
+            if (data.kind === "membersUpdate") {
+                // Update the members list
+                $("#members").html('');
+                $(data.members).each(function () {
+                    $("#members").append('<tr><td>' + this + '</td></tr>');
+                });
+
+                return;
+            }
+
+
+            // Create the message element
+            var el = $(
+                '<table class="message-line table">' +
+                    ' 	<tbody>' +
+                    '		<tr>' +
+                    '			<td class="usr"></td>' +
+                    '			<td class="msg"></td>' +
+                    '			<td class="time"></td>' +
+                    '		</tr>' +
+                    '	</tbody>' +
+                    '</table>'
+            );
+
+            $(".usr", el).text(data.user);
+
+            if (data.user === "") {
+                $(".usr", el).remove();
+                $(".msg", el).css({
+                    'left': '0',
+                    'padding-left': '160px'
+                });
+                $(".msg", el).addClass("muted");
+            }
+
+            handleMessage($(".msg", el), data.message);
+
+            $(".time", el).text(useFullTime === true ? Date.parse('now').toString("HH:mm") : Date.parse('now').toString("hh:mm tt"));
+            $(el).addClass(data.kind);
+
+            if (data.user === user) {
+                $(el).addClass('me');
+            }
+
+            if (data.kind === "join" || data.kind === "quit") {
+                $("span", el).hide();
+                $("p", el).css("padding-left", "60px");
+            }
+
+            $(data.options).each(function () {
+                if (this === "decodehtml") {
+                    $(".msg", el).html($('<div/>').html(data.message));
+                }
             });
 
-            return;
-        }
+            $('#chat-list').append(el);
 
 
+        };
 
-        // Create the message element
-        var el = $(
-                '<table class="message-line table">' +
-                ' 	<tbody>'  +
-                '		<tr>' +
-                '			<td class="usr"></td>' +
-                '			<td class="msg"></td>' +
-                '			<td class="muted time"></td>' +
-                '		</tr>' +
-                '	</tbody>'  +
-                '</table>'
-        );
-
-        //var el = $('<div class="message-line"><span></span><p></p><small class="mute"></small></div>')
-
-        var dng = data.message;
+        var handleReturnKey = function (e) {
 
 
-
-
-        $(".usr", el).text(data.user);
-        $(".msg", el).text(dng);
-        $(".time", el).text("12:00 AM");
-        $(el).addClass(data.kind);
-
-        if(data.user == user) {
-            $(el).addClass('me')
-        }
-
-        if(data.kind == "join" || data.kind == "quit") {
-            $("span", el).hide();
-            $("p", el).css("padding-left", "60px");
-        }
-
-        $(data.options).each(function() {
-            if(this == "decodehtml") {
-                $(".msg", el).html($('<div/>').html(data.message));
+            if (e.charCode === 13 || e.keyCode === 13) {
+                e.preventDefault();
+                sendMessage();
             }
-        });
+        };
 
-        $('#chat-list').append(el)
+        var regex = new RegExp("\\([a-zA-Z]{1,10}\\)");
 
+        var handleMessage = function (dom, msg) {
 
-    }
+            var pending = msg.split(' ');
+            console.log(pending);
 
-    var handleReturnKey = function(e) {
+            for (var i in pending) {
+                var element = $("<div/>").text(pending[i]).html();
+                console.log(element);
 
+                //isnt emote
+                if (!element.match(regex)) {
+                    dom.append(element + " ");
+                    continue;
+                }
 
-        if(e.charCode == 13 || e.keyCode == 13) {
-            e.preventDefault()
-            sendMessage()
+                var domImage = getImg(element);
+                if (domImage === false) {
+                    dom.append(element);
+                    return;
+                }
+
+                dom.append(domImage);
+            }
+
+        };
+
+        var getImg = function (src) {
+
+            src = src.slice(1, -1);
+
+            src = $('<div/>').text(src).html();
+
+            if (urlExists(imgur + src + ".png")) {
+                return "<img src='" + imgur + src + ".png' /> ";
+            }
+
+            if (urlExists(imgur + src + ".gif")) {
+                return "<img src='" + imgur + src + ".gif' /> ";
+            }
+
+            return false;
         }
-    }
 
-    $("#txt-chat").keypress(handleReturnKey)
-    $("#btn-chat").click(sendMessage);
+        $("#txt-chat").keypress(handleReturnKey);
+        $("#btn-chat").click(sendMessage);
 
-    chatSocket.onmessage = receiveEvent
+        chatSocket.onmessage = receiveEvent;
 
-})
+
+        // ---------------
+        // - Utils.js
+        // --------------
+
+        function urlExists(testUrl) {
+            var http = jQuery.ajax({
+                type:"GET",
+                url: testUrl,
+                async: false
+            })
+            return http.status!=404;
+        }
+
+    });
+}(window.jQuery);
+
+

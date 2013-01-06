@@ -35,6 +35,9 @@ public class ChatRoom extends UntypedActor {
 	static {
 		defaultRoom = Akka.system().actorOf( new Props( ChatRoom.class ) );
 		events = new EventSystem();
+
+		//Anything else that uses event system must be created after event system.
+
 		mRoboto = new Robot( defaultRoom );
 	}
 

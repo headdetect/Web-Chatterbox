@@ -31,6 +31,14 @@ public class User {
 	public WebSocket.Out<JsonNode> outSocket;
 	public WebSocket.In<JsonNode> inSocket;
 
+	// --------------
+	// - Options
+	// --------------
+
+	public boolean useFullTime;
+	public boolean showEmotes;
+
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -38,6 +46,7 @@ public class User {
 	public User ( String string ) {
 		this();
 		this.username = string;
+
 	}
 
 	public User () {
@@ -128,7 +137,8 @@ public class User {
 			// Add all members to array node
 			ArrayNode mNode = event.putArray( "members" );
 			for ( int i = 0; i < users.size(); i++ ) {
-				mNode.add( StringEscapeUtils.escapeHtml4( users.get( i ).username ) );
+				if ( users.get( i ) != SYSTEM )
+					mNode.add( StringEscapeUtils.escapeHtml4( users.get( i ).username ) );
 			}
 
 			user.outSocket.write( event );
@@ -146,7 +156,7 @@ public class User {
 
 		ObjectNode event = Json.newObject();
 		event.put( "kind", kind );
-		event.put( "user", from.username );
+		event.put( "user", from != SYSTEM ? from.username : "" );
 		event.put( "message", asText );
 
 

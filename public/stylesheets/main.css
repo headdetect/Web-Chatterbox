@@ -172,14 +172,13 @@ body {
 }
 
 #chat-list .message-line .time {
-
-    right: 20px;
-    top: 0;
-
-    display: inline-block;
+    position: relative;
+    float: right;
 
     background: transparent;
 
+    color: #999;
+    font-size: .75em;
 }
 
 #chat-list .message-line.me .usr {
