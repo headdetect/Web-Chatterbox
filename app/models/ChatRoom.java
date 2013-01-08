@@ -95,7 +95,7 @@ public class ChatRoom extends UntypedActor {
 	public void onReceive ( Object message ) throws Exception {
 
 		if ( message == null ) {
-			Logger.instance.log( "Recieved null message", Log.LOG_LEVEL_WARNING );
+			Logger.log( "Recieved null message", Log.LOG_LEVEL_WARNING );
 			return;
 		}
 
@@ -141,10 +141,8 @@ public class ChatRoom extends UntypedActor {
 
 					onQuitEvent event = new onQuitEvent( quit );
 					events.callEvent( event );
-
+                    User.sendGlobalMessage( "quit", User.SYSTEM, quit.getUser().username + " left the room" );
 					User.removeUser( quit.getUser() );
-
-					User.sendGlobalMessage( "quit", User.SYSTEM, quit.getUser().username + " left the room" );
 					User.sendListUpdate();
 
 				} else {

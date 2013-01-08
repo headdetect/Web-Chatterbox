@@ -5,12 +5,13 @@ import chatterbox.events.EventHandler;
 import chatterbox.events.Listener;
 import chatterbox.events.Priority;
 import chatterbox.events.chatroom.onTalkEvent;
+import chatterbox.utils.Logger;
 import models.ChatRoom.Talk;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jackson.JsonNode;
-import play.Logger;
 import play.libs.Json;
 import play.mvc.WebSocket;
+import chatterbox.utils.Logger;
 
 public class Robot implements Listener {
 
@@ -25,8 +26,8 @@ public class Robot implements Listener {
 
 			@Override
 			public void write ( JsonNode frame ) {
-				Logger.of( "robot" ).info( Json.stringify( frame ) );
-			}
+                Logger.log(Json.stringify(frame));
+            }
 
 			@Override
 			public void close () {
@@ -54,7 +55,7 @@ public class Robot implements Listener {
 		 * We Don't want any echos now do we.
 		 */
 		if ( talk.getUser() == mUser ) {
-			System.out.println( "Robot recieved echo" );
+			Logger.log("Robot recieved echo");
 			return;
 		}
 
@@ -98,7 +99,7 @@ public class Robot implements Listener {
 				if ( query.contains( "what is my ip" ) ) {
 					reply( "Looks like your IP is " + talk.getUser().ipAddress + ". But I could be wrong." );
 				} else {
-					String cleaned = StringEscapeUtils.escapeHtml4( query.substring( query.indexOf( ',' ) + 1, query.length() ).trim().replace( "+", "%2B" ).replace( ' ', '+' ) );
+					String cleaned = StringEscapeUtils.escapeHtml4( query.substring( query.indexOf( ' ' ) + 1, query.length() ).trim().replace( "+", "%2B" ).replace( ' ', '+' ) );
 					reply( "<a href=\"http://lmgtfy.com/?q=" + cleaned + "\">I don't know what to say to that </a>", "decodehtml" );
 				}
 			}

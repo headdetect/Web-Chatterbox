@@ -1,7 +1,10 @@
 package chatterbox.utils;
 
+import org.fusesource.jansi.AnsiConsole;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,8 +12,6 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import org.fusesource.jansi.AnsiConsole;
 
 public class Logger implements Runnable {
 	
@@ -32,65 +33,25 @@ public class Logger implements Runnable {
 	// Fields
 	// ===========================================================
 	
-	private final DateFormat dateFormat = new SimpleDateFormat( "yyyy/MM/dd HH:mm:ss" );
+	private static final DateFormat dateFormat = new SimpleDateFormat( "yyyy/MM/dd HH:mm:ss" );
 
-	private String filePath;
+	private static String filePath;
 
-	private PrintWriter out;
+	private static PrintWriter out;
 
-	private Queue< Log > queue = new LinkedList< Log >();
+	private static Queue< Log > queue = new LinkedList< Log >();
 
-	private boolean Running;
-	
-	public static Logger instance;
+	private static boolean Running;
+
+
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	
-	/**
-	 * Create a new instance of Logger.
-	 *
-	 * @param filePath The filePath of the log file
-	 */
-	Logger( String filePath) {
-		this.filePath = filePath;
-	}
-
-	static {
-		Calendar cal = Calendar.getInstance();
-        cal.clear(Calendar.HOUR);
-        cal.clear(Calendar.MINUTE);
-        cal.clear(Calendar.SECOND);
-        cal.clear(Calendar.MILLISECOND);
-        instance = new Logger("logs/" + cal.getTime() + ".txt");
-        String filename = cal.getTime().toString().replace(" ", "-");
-        String finalName = filename.split("-")[0] + "-" + filename.split("-")[1] + "-" + filename.split("-")[2];
-        try {
-            instance.changeFilePath("logs/" + finalName + ".txt");
-        } catch (IOException e2) {
-            System.out.println("logs/" + finalName + ".txt");
-            e2.printStackTrace();
-        }
-        
-        instance.run();
-        
-        instance.log( "Logger started" );
-	}
-	
 
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-	
-	/**
-	 * Gets the writer.
-	 *
-	 * @return the writer
-	 */
-	public PrintWriter getWriter() {
-		return out;
-	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
@@ -102,16 +63,26 @@ public class Logger implements Runnable {
 	 * @throws FileNotFoundException
 	 *             If the file to log to cant be found
 	 */
-	@Override
 	public void run() {
-		AnsiConsole.systemInstall();
-		
 		Running = true;
+
+        Calendar cal = Calendar.getInstance();
+        cal.clear(Calendar.HOUR);
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+        String filename = cal.getTime().toString().replace(" ", "-");
+        String finalName = filename.split("-")[0] + "-" + filename.split("-")[1] + "-" + filename.split("-")[2];
+        try {
+            Logger.changeFilePath("logs/" + finalName + ".txt");
+        } catch (IOException e) {
+            System.out.println("logs/" + finalName + ".txt");
+            e.printStackTrace();
+        }
 		
-		
-		Iterator< Log > it = null;
+		Iterator< Log > it;
 		while ( Running ) {
-			synchronized ( queue ) {
+            synchronized (queue) {
 				if ( out == null ) {
 					try {
 						Thread.sleep( 10 );
@@ -123,7 +94,7 @@ public class Logger implements Runnable {
 				if ( it == null )
 					continue;
 				while ( it.hasNext() ) {
-					Log log = (Log) it.next();
+					Log log = it.next();
 					
 					String message = log.message;
 					
@@ -149,11 +120,11 @@ public class Logger implements Runnable {
 
 
 					if ( out != null )
-						out.println( log.message );
+						out.append(log.message + "\n");
 				}
 				queue.clear();
 				out.flush();
-			}
+            }
 			try {
 				Thread.sleep( 10 );
 			} catch ( InterruptedException e ) {
@@ -165,6 +136,7 @@ public class Logger implements Runnable {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+
 	
 	/**
 	 * Stop writing logs This code will block until all logs have been written
@@ -172,9 +144,7 @@ public class Logger implements Runnable {
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void stop() throws InterruptedException {
-		AnsiConsole.systemUninstall();
-		
+	public void kill() throws InterruptedException {
 		Running = false;
 		out.close();
 	}
@@ -185,15 +155,8 @@ public class Logger implements Runnable {
 	 * @param message
 	 *            The message to add
 	 */
-	public void log( String message ) {
-		synchronized ( queue ) {
-			if ( !Running )
-				return;
-			Calendar cal = Calendar.getInstance();
-			String date = dateFormat.format( cal.getTime() );
-			String finalmessage = "[" + date + "] " + message;
-			queue.add( new Log ( finalmessage, Log.LOG_LEVEL_NORMAL ) );
-		}
+	public static void log( String message ) {
+        log(message, Log.LOG_LEVEL_NORMAL);
 	}
 	
 	/**
@@ -202,37 +165,40 @@ public class Logger implements Runnable {
 	 * @param message
 	 *            The message to add
 	 */
-	public void log( String message, int logLevel ) {
-		synchronized ( queue ) {
+	public static void log( String message, int logLevel ) {
+
+
+        synchronized (queue) {
 			if ( !Running )
 				return;
 			Calendar cal = Calendar.getInstance();
 			String date = dateFormat.format( cal.getTime() );
 			String finalmessage = "[" + date + "] " + message;
 			queue.add( new Log ( finalmessage, logLevel ) );
-		}
+        }
 	}
 
 	/**
 	 * Change the filePath of the log file
 	 * 
-	 * @param newpath
+	 * @param filename
 	 *            The new filePath
 	 * @throws IOException
 	 */
-	public void changeFilePath( String filename ) throws IOException {
-		this.filePath = filename;
+	public static void changeFilePath( String filename ) throws IOException {
+		Logger.filePath = filename;
 		if ( out != null )
 			out.close();
 		FileUtils.createIfNotExist(filePath);
-		out = new PrintWriter(filePath);
+		out = new PrintWriter(filename);
 	}
 
-	// ===========================================================
+
+    // ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
 
-	public class Log {
+	public static class Log {
 		
 		public static final int LOG_LEVEL_NORMAL 	= 0;
 		public static final int LOG_LEVEL_INFO 		= 1;

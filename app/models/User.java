@@ -1,6 +1,7 @@
 package models;
 
 import chatterbox.core.user.Permission;
+import chatterbox.utils.Logger;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
@@ -92,7 +93,7 @@ public class User {
 	public static void addUser ( User user ) {
 		users.add( user );
 
-		System.out.println( "New user added: " + user.username + ", ID=" + user.ID + ", IP=" + user.ipAddress );
+        Logger.log("New user added: " + user.username + ", ID=" + user.ID + ", IP=" + user.ipAddress);
 
 	}
 
@@ -150,7 +151,7 @@ public class User {
 		if ( this == SYSTEM || outSocket == null ) {
 			// Just log the messages sent to the system
 
-			System.out.println( kind + " -> (" + from.username + "): " + asText );
+			Logger.log(kind + " -> (" + from.username + "): " + asText, Logger.Log.LOG_LEVEL_INFO);
 			return;
 		}
 

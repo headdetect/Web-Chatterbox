@@ -18,6 +18,7 @@
 
         };
 
+
         var receiveEvent = function (event) {
             var data = JSON.parse(event.data);
 
@@ -40,8 +41,10 @@
             if (data.kind === "membersUpdate") {
                 // Update the members list
                 $("#members").html('');
+
                 $(data.members).each(function () {
                     $("#members").append('<tr><td>' + this + '</td></tr>');
+
                 });
 
                 return;
@@ -111,11 +114,9 @@
         var handleMessage = function (dom, msg) {
 
             var pending = msg.split(' ');
-            console.log(pending);
 
             for (var i in pending) {
                 var element = $("<div/>").text(pending[i]).html();
-                console.log(element);
 
                 //isnt emote
                 if (!element.match(regex)) {
@@ -141,11 +142,11 @@
             src = $('<div/>').text(src).html();
 
             if (urlExists(imgur + src + ".png")) {
-                return "<img src='" + imgur + src + ".png' /> ";
+                return "<img src='" + imgur + src + ".png' />&nbsp;";
             }
 
             if (urlExists(imgur + src + ".gif")) {
-                return "<img src='" + imgur + src + ".gif' /> ";
+                return "<img src='" + imgur + src + ".gif' />&nbsp;";
             }
 
             return false;
@@ -163,11 +164,11 @@
 
         function urlExists(testUrl) {
             var http = jQuery.ajax({
-                type:"GET",
+                type: "GET",
                 url: testUrl,
                 async: false
             })
-            return http.status!=404;
+            return http.status != 404;
         }
 
     });
