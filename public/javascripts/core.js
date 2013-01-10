@@ -19,6 +19,8 @@
         };
 
 
+        var count = 0;
+
         var receiveEvent = function (event) {
             var data = JSON.parse(event.data);
 
@@ -53,7 +55,7 @@
 
             // Create the message element
             var el = $(
-                '<table class="message-line table">' +
+                    '<table id="tbl' + count + '" class="message-line table">' +
                     ' 	<tbody>' +
                     '		<tr>' +
                     '			<td class="usr"></td>' +
@@ -97,7 +99,14 @@
 
             $('#chat-list').append(el);
 
+            //Fix the crap stuff k?
 
+            var tbl = $("#tbl" + count);
+            var biggestHeight = $(".msg", tbl).innerHeight();
+
+            tbl.height(biggestHeight);
+            $(".usr", tbl).height(biggestHeight - 15 /*padding*/ - 1 /* border-top */);
+            count++;
         };
 
         var handleReturnKey = function (e) {
@@ -172,6 +181,7 @@
         }
 
     });
+
 }(window.jQuery);
 
 
