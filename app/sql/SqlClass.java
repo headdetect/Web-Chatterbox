@@ -18,38 +18,38 @@ public abstract class SqlClass implements SqlInterface {
 	public ResultSet results;
 	
 
-	public void build(String sql) {
+	public void build( String sql ) {
 		current_query += sql;
 	}
 	
-	public ResultSet executePreparedQuery(String[] parameters) {
-		ResultSet query = executeRawPreparedQuery(current_query, parameters);
+	public ResultSet executePreparedQuery( String[] parameters ) {
+		ResultSet query = executeRawPreparedQuery( current_query, parameters );
 		current_query = "";
 		return query;
 	}
 	
-	public int executePreparedUpdate(String[] parameters) {
-		int query = executeRawPreparedUpdate(current_query, parameters);
+	public int executePreparedUpdate( String[] parameters ) {
+		int query = executeRawPreparedUpdate( current_query, parameters );
 		current_query = "";
 		return query;
 	}
 
 	public ResultSet executeQuery() {
-		ResultSet query = executeRawQuery(current_query);
+		ResultSet query = executeRawQuery( current_query );
 		current_query = "";
 		return query;
 	}
 	
 	public int executeUpdate() {
-		int query = executeRawUpdate(current_query);
+		int query = executeRawUpdate( current_query );
 		current_query = "";
 		return query;
 	}
 
 	public boolean isConnected() {
 		try {
-			return conn.isValid(10) ? true : false;
-		} catch (SQLException e) {
+			return conn.isValid( 10 ) ? true : false;
+		} catch ( SQLException e ) {
 			return false;
 		}
 	}
