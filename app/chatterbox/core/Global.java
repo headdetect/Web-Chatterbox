@@ -2,11 +2,10 @@ package chatterbox.core;
 
 import akka.util.Duration;
 import chatterbox.utils.Logger;
+import models.Robot;
 import models.User;
-import org.apache.commons.lang3.StringEscapeUtils;
 import play.Application;
 import play.GlobalSettings;
-import play.data.Form;
 import play.libs.Akka;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -50,6 +49,8 @@ public class Global extends GlobalSettings {
         System.out.println("Started Logger");
         Akka.system().scheduler().scheduleOnce(Duration.create(0, TimeUnit.MILLISECONDS), logger);
 
+        System.out.println("Adding System Users");
+        User.addOnlineUser(User.SYSTEM);
     }
 
     @Override

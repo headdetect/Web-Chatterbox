@@ -118,7 +118,7 @@
             }
         };
 
-        var regex = new RegExp("\\([a-zA-Z]{1,10}\\)");
+        var regex = new RegExp("\\([a-zA-Z]{1,25}\\)");
 
         var handleMessage = function (dom, msg) {
 

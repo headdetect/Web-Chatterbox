@@ -142,7 +142,7 @@ public class ChatRoom extends UntypedActor {
 					onQuitEvent event = new onQuitEvent( quit );
 					events.callEvent( event );
                     User.sendGlobalMessage( "quit", User.SYSTEM, quit.getUser().username + " left the room" );
-					User.removeUser( quit.getUser() );
+					User.removeOnlineUser(quit.getUser());
 					User.sendListUpdate();
 
 				} else {
@@ -169,7 +169,7 @@ public class ChatRoom extends UntypedActor {
 		}
 
 		public User getUser () {
-			return User.findUserById( user );
+			return User.getOnlineUserById(user);
 		}
 	}
 
@@ -186,7 +186,7 @@ public class ChatRoom extends UntypedActor {
 		}
 
 		public User getUser () {
-			return User.findUserById( user );
+			return User.getOnlineUserById(user);
 		}
 
 	}
@@ -200,7 +200,7 @@ public class ChatRoom extends UntypedActor {
 		}
 
 		public User getUser () {
-			return User.findUserById( user );
+			return User.getOnlineUserById(user);
 		}
 
 	}

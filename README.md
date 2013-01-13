@@ -1,14 +1,28 @@
 Chatterbox
 ==============
 
-##Installation
+##Installs
 
-- Download [Playframework 2.0.4](http://download.playframework.org/releases/play-2.0.4.zip)
-- Update [PATH](http://java.com/en/download/help/path.xml) to include root folder of play framework. (Must include play.bat if on windows)
-- Once path is updated. Test it by typing `play help`
-- `cd` to the project folder then type `play`. 
-- A shell should now appear. Type `eclipsify` if using eclipse. `idea` if using intellj. Netbeans is not supported.
-- After your project has been created. Type `play run`. This will start the server with the ChatterBox application.
+- [MySQL server] (http://www.sitepoint.com/how-to-install-mysql/)
+- [Play Framework] (http://www.playframework.org/documentation/2.0.4/Installing)
+- [Intellij (Optional)] (http://www.jetbrains.com/idea/)
+
+
+##Running
+
+### Starting App
+
+- [Play instructions] (http://www.playframework.org/documentation/2.0.4/NewApplication)
+
+### Debugging with Intellij
+
+- Start play application using `play debug`
+- In Intellij, click the debug button. Debug Configurations window should pop up.
+- Add new `Remote` configuration.
+- Set port to `9999`, Module to `Web-Chatterbox`
+- Leave everything else at default.
+- Save and run.
+
 
 ##Contributing
 

@@ -8,8 +8,8 @@
 
     <script>
         var sock = "@routes.Chat.chat(String.valueOf(id)).webSocketURL(request)";
-        var user = '@User.findUserById(id).username';
-        var useFullTime = '@String.valueOf(User.findUserById(id).useFullTime)'
+        var user = '@User.getOnlineUserById(id).username';
+        var useFullTime = '@String.valueOf(User.getOnlineUserById(id).useFullTime)'
         var imgur = '@routes.Assets.at("images/emotes/")';
     </script>
 

@@ -11,38 +11,21 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jackson.JsonNode;
 import play.libs.Json;
 import play.mvc.WebSocket;
-import chatterbox.utils.Logger;
 
 public class Robot implements Listener {
 
-	final static User mUser = new User( "Robot" );
-	private ActorRef mChatRoom;
+	public User mUser;
+    private ActorRef mChatRoom;
 
 	public Robot ( ActorRef chatRoom ) {
-
-		// Create a Fake socket out for the robot that log events to the
-		// console.
-		WebSocket.Out<JsonNode> robotChannel = new WebSocket.Out<JsonNode>() {
-
-			@Override
-			public void write ( JsonNode frame ) {
-                Logger.log(Json.stringify(frame));
-            }
-
-			@Override
-			public void close () {
-			}
-
-		};
-
-
-		mUser.outSocket = robotChannel;
+        mUser = new User( "Robot" );
+        mUser.ID = 2;
 
 		// Join the room
 		chatRoom.tell( new ChatRoom.Join( mUser.ID ) );
 		mChatRoom = chatRoom;
 
-		User.addUser( mUser );
+		User.addOnlineUser(mUser);
 		ChatRoom.events.registerEvents( this );
 	}
 
@@ -97,7 +80,7 @@ public class Robot implements Listener {
 				reply( "NOOOOOOOO" );
 			} else {
 				if ( query.contains( "what is my ip" ) ) {
-					reply( "Looks like your IP is " + talk.getUser().ipAddress + ". But I could be wrong." );
+					reply( "Looks like your IP is " + talk.getUser().getIpAddress() + ". But I could be wrong." );
 				} else {
 					String cleaned = StringEscapeUtils.escapeHtml4( query.substring( query.indexOf( ' ' ) + 1, query.length() ).trim().replace( "+", "%2B" ).replace( ' ', '+' ) );
 					reply( "<a href=\"http://lmgtfy.com/?q=" + cleaned + "\">I don't know what to say to that </a>", "decodehtml" );

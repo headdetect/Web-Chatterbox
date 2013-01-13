@@ -8,7 +8,7 @@ import views.html.index;
 
 public class Application extends Controller {
 
-	final static Form< User > userForm = form( User.class );
+	final static Form<User> userForm = form( User.class );
 
 	/**
 	 * Display the home page.
