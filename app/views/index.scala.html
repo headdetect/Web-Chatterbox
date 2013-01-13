@@ -5,35 +5,29 @@
 @main(null) {
    
     @if(flash.containsKey("error")) {
-        
-        <div class="alert-message error">
-            <p>
+        <div class="alert alert-error">
                 <strong>Oops!</strong> @flash.get("error")
-            </p>
         </div>
-        
     }
      
-    @helper.form(action = routes.Chat.verify, 'class -> "fieldset-signin") { 
+    @helper.form(action = routes.Chat.verify, 'class -> "fieldset-signin") {
 	    <fieldset>
 	    	<legend>Sign In</legend>
-				@helper.inputText( 
-					userForm("username"), 
-					'_label -> "",
-					'class -> "input-block-level", 
-					'placeholder -> "Username"
-				)
-				
-				@helper.inputPassword( 
-					userForm("password"), 
-					'_label -> "",
-					'class -> "input-block-level", 
-					'placeholder -> "Password"
-				)
-				
-			
+			@helper.inputText(
+				userForm("username"),
+				'_label -> "",
+				'class -> "input-block-level",
+				'placeholder -> "Username"
+			)
+
+			@helper.inputPassword(
+				userForm("password"),
+				'_label -> "",
+				'class -> "input-block-level",
+				'placeholder -> "Password"
+			)
 	    </fieldset>
-	    
+
 	    <div class="actions">
             <input type="submit" class="btn btn-primary" value="Sign In">
         </div>

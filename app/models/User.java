@@ -1,15 +1,15 @@
 package models;
 
-import java.util.ArrayList;
-
-import org.apache.commons.lang.StringEscapeUtils;
+import chatterbox.core.user.Permission;
+import chatterbox.utils.Logger;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
 import org.codehaus.jackson.node.ObjectNode;
-
 import play.libs.Json;
 import play.mvc.WebSocket;
-import core.User.Permission;
+
+import java.util.ArrayList;
 
 public class User {
 
@@ -17,46 +17,45 @@ public class User {
 	// Constants
 	// ===========================================================
 
+	public static User SYSTEM = new User( "System" );
 	// ===========================================================
 	// Fields
 	// ===========================================================
-
-	private static ArrayList< User > users = new ArrayList< User >();
-
+	private static ArrayList<User> users = new ArrayList<User>();
 	// TODO: Replace with dynamically adjusting value based on user's past IDs
 	private static long currentID = 0;
-
-	public static User SYSTEM = new User( "System" );
-
-	static {
-		User.addUser( SYSTEM );
-	}
-
 	public String username;
-	
 	public String password;
-
 	public long ID;
-
 	public String ipAddress;
-
 	public Permission permission = Permission.Member;
+	public WebSocket.Out<JsonNode> outSocket;
+	public WebSocket.In<JsonNode> inSocket;
 
-	public WebSocket.Out< JsonNode > outSocket;
+	// --------------
+	// - Options
+	// --------------
 
-	public WebSocket.In< JsonNode > inSocket;
+	public boolean useFullTime;
+	public boolean showEmotes;
+
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public User( String string ) {
+	public User ( String string ) {
 		this();
 		this.username = string;
+
 	}
 
-	public User() {
+	public User () {
 		this.ID = currentID++;
+	}
+
+	static {
+		User.addUser( SYSTEM );
 	}
 
 	// ===========================================================
@@ -71,41 +70,7 @@ public class User {
 	// Methods
 	// ===========================================================
 
-	public void sendMessage( String kind , User from , String asText ) {
-		if ( this == SYSTEM || outSocket == null ) {
-			// Just log the messages sent to the system
-
-			System.out.println( kind + " -> (" + from.username + "): " + asText );
-			return;
-		}
-
-		ObjectNode event = Json.newObject();
-		event.put( "kind" , kind );
-		event.put( "user" , from.username );
-		event.put( "message" , asText );
-
-		outSocket.write( event );
-	}
-
-	public void sendMessage( User from , String asText ) {
-		sendMessage( "talk" , from , asText );
-	}
-
-	public void sendMessage( String text ) {
-		sendMessage( this , text );
-	}
-
-	public void kick() {
-		ChatRoom.defaultRoom.tell( new ChatRoom.Quit( ID ) );
-	}
-
-	public void tell( String message ) {
-		ChatRoom.defaultRoom.tell( new ChatRoom.Talk( ID , message ) );
-	}
-
-	// -------- Utils ------------
-
-	public static User findUserById( long ID ) {
+	public static User findUserById ( long ID ) {
 		for ( int i = 0; i < users.size(); i++ ) {
 			if ( users.get( i ).ID == ID )
 				return users.get( i );
@@ -113,7 +78,7 @@ public class User {
 		return null;
 	}
 
-	public static User findUserByUsername( String username ) {
+	public static User findUserByUsername ( String username ) {
 		for ( int i = 0; i < users.size(); i++ ) {
 			if ( users.get( i ).username.equals( username ) )
 				return users.get( i );
@@ -121,43 +86,45 @@ public class User {
 		return null;
 	}
 
-	public static boolean exists( User user ) {
+	public static boolean exists ( User user ) {
 		return users.contains( user );
 	}
 
-	public static void addUser( User user ) {
+	public static void addUser ( User user ) {
 		users.add( user );
 
-		System.out.println( "New user added: " + user.username + ", ID=" + user.ID + ", IP=" + user.ipAddress );
+        Logger.log("New user added: " + user.username + ", ID=" + user.ID + ", IP=" + user.ipAddress);
 
 	}
 
-	public static void removeUser( User user ) {
+	public static void removeUser ( User user ) {
 		if ( users.contains( user ) ) {
 			users.remove( user );
 		}
 
 	}
 
-	public static ArrayList< User > getUsers() {
+	public static ArrayList<User> getUsers () {
 		return users;
 	}
 
-	public static void sendGlobalMessage( String kind , User from , String message ) {
+	// -------- Utils ------------
+
+	public static void sendGlobalMessage ( String kind, User from, String message, Object... options ) {
 		for ( User user : users ) {
-			user.sendMessage( kind , from , message );
+			user.sendMessage( kind, from, message, options );
 		}
 	}
 
-	public static void sendGlobalMessage( User from , String msg ) {
-		sendGlobalMessage( "talk" , from , msg );
+	public static void sendGlobalMessage ( User from, String msg ) {
+		sendGlobalMessage( "talk", from, msg );
 	}
 
-	public static void sendGlobalMessage( String message ) {
-		sendGlobalMessage( User.SYSTEM , message );
+	public static void sendGlobalMessage ( String message ) {
+		sendGlobalMessage( User.SYSTEM, message );
 	}
 
-	public static void sendListUpdate() {
+	public static void sendListUpdate () {
 		for ( User user : users ) {
 
 			if ( user == SYSTEM || user == Robot.mUser || user.outSocket == null ) {
@@ -166,17 +133,58 @@ public class User {
 			}
 
 			ObjectNode event = Json.newObject();
-			event.put( "kind" , "membersUpdate" );
+			event.put( "kind", "membersUpdate" );
 
 			// Add all members to array node
 			ArrayNode mNode = event.putArray( "members" );
 			for ( int i = 0; i < users.size(); i++ ) {
-				mNode.add( StringEscapeUtils.escapeHtml( users.get( i ).username ) );
+				if ( users.get( i ) != SYSTEM )
+					mNode.add( StringEscapeUtils.escapeHtml4( users.get( i ).username ) );
 			}
 
 			user.outSocket.write( event );
 		}
 
+	}
+
+	public void sendMessage ( String kind, User from, String asText, Object... options ) {
+		if ( this == SYSTEM || outSocket == null ) {
+			// Just log the messages sent to the system
+
+			Logger.log(kind + " -> (" + from.username + "): " + asText, Logger.Log.LOG_LEVEL_INFO);
+			return;
+		}
+
+		ObjectNode event = Json.newObject();
+		event.put( "kind", kind );
+		event.put( "user", from != SYSTEM ? from.username : "" );
+		event.put( "message", asText );
+
+
+		ArrayNode mNode = event.putArray( "options" );
+		if ( options != null ) {
+			for ( int i = 0; i < options.length; i++ ) {
+				mNode.add( options[ i ].toString() );
+			}
+		}
+
+		outSocket.write( event );
+	}
+
+	public void sendMessage ( User from, String asText ) {
+		sendMessage( "talk", from, asText );
+	}
+
+	public void sendMessage ( String text ) {
+		sendMessage( this, text );
+	}
+
+	public void kick () {
+		ChatRoom.defaultRoom.tell( new ChatRoom.Quit( ID ) );
+	}
+
+	public void tell ( String message ) {
+		ChatRoom.defaultRoom.tell( new ChatRoom.Talk( ID, message ) );
 	}
 
 	// ===========================================================
