@@ -116,7 +116,7 @@ public class Logger implements Runnable {
 							
 					}
 					
-					AnsiConsole.out.println( message );
+					AnsiConsole.out.println( message + ANSI_RESET );
 
 
 					if ( out != null )

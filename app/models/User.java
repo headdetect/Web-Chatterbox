@@ -18,8 +18,6 @@ import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.avaje.ebean.Ebean.save;
-
 @Entity
 @Table(name = "o_users")
 public class User extends Model {
@@ -45,10 +43,8 @@ public class User extends Model {
     public long ID;
     //@Constraints.Required
     public Permission permission = Permission.Member;
-
     @Transient
     public WebSocket.Out<JsonNode> outSocket;
-
     @Transient
     public WebSocket.In<JsonNode> inSocket;
     // --------------
@@ -85,22 +81,6 @@ public class User extends Model {
     // Getter & Setter
     // ===========================================================
 
-    public String getIpAddress() {
-        return this.ipAddress;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
-    // ===========================================================
-    // Methods for/from SuperClass/Interfaces
-    // ===========================================================
-
-    // ===========================================================
-    // Methods
-    // ===========================================================
-
     //--------------
     //- Registration
     //--------------
@@ -115,6 +95,14 @@ public class User extends Model {
             Logger.log("New user registered: " + user.username + ", ID=" + user.ID + ", IP=" + user.ipAddress);
         }
     }
+
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
+
+    // ===========================================================
+    // Methods
+    // ===========================================================
 
     public static void unregisterUser(User user) {
         find.ref(user.ID).delete();
@@ -131,16 +119,16 @@ public class User extends Model {
     public static void addOnlineUser(User user) {
 
         //Is system or robot.
-        if(user.ID == 1 || user.ID == 2){
+        if (user.ID == 1 || user.ID == 2) {
             onlineUsers.add(user);
             return;
         }
 
         if (!onlineUserExists(user)) {
 
-            User dbUser  = find.where().eq("username", user.username).findUnique();
+            User dbUser = find.where().eq("username", user.username).findUnique();
 
-            if(dbUser == null){
+            if (dbUser == null) {
                 return;
             }
 
@@ -153,22 +141,34 @@ public class User extends Model {
         }
     }
 
-    //----------------
-    //- Online
-    //---------------
-
-    public static void removeOnlineUser(User user) {
+    public static boolean removeOnlineUser(User user) {
         if (onlineUserExists(user)) {
-            int index = onlineUsers.indexOf(user);
 
-            if (index != -1)
-                onlineUsers.remove(index);
+            /*
+                Because play and ebean have their on ID impl
+                it causes errors when trying to get the index of a Model in
+                a list. So as a result, we have to loop through all items and remove from index.
+            */
+            for (int i = 0; i < onlineUsers.size(); i++) {
+                User from = onlineUsers.get(i);
+
+                if (from == user) {
+                    onlineUsers.remove(i);
+                    return true;
+                }
+            }
         }
+
+        return false;
     }
 
     public static List<User> getAllOnlineUsers() {
         return onlineUsers;
     }
+
+    //----------------
+    //- Online
+    //---------------
 
     public static User getOnlineUserById(long id) {
         for (int i = 0; i < onlineUsers.size(); i++) {
@@ -187,8 +187,6 @@ public class User extends Model {
     public static void sendGlobalMessage(User from, String msg) {
         sendGlobalMessage("talk", from, msg);
     }
-
-    // -------- Utils ------------
 
     public static void sendGlobalMessage(String message) {
         sendGlobalMessage(User.SYSTEM, message);
@@ -218,7 +216,15 @@ public class User extends Model {
 
     }
 
+    // -------- Utils ------------
 
+    public String getIpAddress() {
+        return this.ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
 
     public void sendMessage(String kind, User from, String asText, Object... options) {
         if (this == SYSTEM || outSocket == null) {
