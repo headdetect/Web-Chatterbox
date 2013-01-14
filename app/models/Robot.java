@@ -20,6 +20,7 @@ public class Robot implements Listener {
 	public Robot ( ActorRef chatRoom ) {
         mUser = new User( "Robot" );
         mUser.ID = 2;
+        User.registerUser( mUser );
 
 		// Join the room
 		chatRoom.tell( new ChatRoom.Join( mUser.ID ) );
