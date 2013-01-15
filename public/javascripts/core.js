@@ -14,7 +14,7 @@
                 {text: $("#txt-chat").val()}
             ));
             $("#txt-chat").val('');
-            $("#chat-container").animate({ scrollTop: $("#chat-container").height() }, "fast");
+            
 
         };
 
@@ -98,7 +98,7 @@
             });
 
             $('#chat-list').append(el);
-
+			$("#chat-container").animate({ scrollTop: $("#chat-container")[0].scrollHeight }, "fast");
             //Fix the crap stuff k?
 
             var tbl = $("#tbl" + count);
