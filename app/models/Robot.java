@@ -80,7 +80,7 @@ public class Robot implements Listener {
 				reply( "NOOOOOOOO" );
 			} else {
 				if ( query.contains( "what is my ip" ) ) {
-					reply( "Looks like your IP is " + talk.getUser().getIpAddress() + ". But I could be wrong." );
+					reply( "Looks like your IP is " + talk.getUser().ipAddress + ". But I could be wrong." );
 				} else {
 					String cleaned = StringEscapeUtils.escapeHtml4( query.substring( query.indexOf( ' ' ) + 1, query.length() ).trim().replace( "+", "%2B" ).replace( ' ', '+' ) );
 					reply( "<a href=\"http://lmgtfy.com/?q=" + cleaned + "\">I don't know what to say to that </a>", "decodehtml" );

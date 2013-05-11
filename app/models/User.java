@@ -32,29 +32,42 @@ public class User extends Model {
     // ===========================================================
     public static Model.Finder<Long, User> find = new Model.Finder<Long, User>(Long.class, User.class);
     private static ArrayList<User> onlineUsers = new ArrayList<User>();
-    //@Constraints.Required
+
+
     public String username;
-    //@Constraints.Required
     public String password;
-    //@Constraints.Email
+
     public String email;
+
     @Id
-    //@Constraints.Min(3)
     public long ID;
-    //@Constraints.Required
+
     public Permission permission = Permission.Member;
+
+
+    //------------------
+    //- Runtime Elements
+    //------------------
+
     @Transient
     public WebSocket.Out<JsonNode> outSocket;
+
     @Transient
     public WebSocket.In<JsonNode> inSocket;
+
+    @Transient
+    public String ipAddress;
+
     // --------------
     // - Options
     // --------------
-    //@Constraints.Required
+
+
     public boolean useFullTime;
-    //@Constraints.Required
+
     public boolean showEmotes;
-    private String ipAddress;
+
+
 
 
     // ===========================================================
@@ -81,6 +94,14 @@ public class User extends Model {
     // Getter & Setter
     // ===========================================================
 
+    // ===========================================================
+    // Methods for/from SuperClass/Interfaces
+    // ===========================================================
+
+    // ===========================================================
+    // Methods
+    // ===========================================================
+
     //--------------
     //- Registration
     //--------------
@@ -95,14 +116,6 @@ public class User extends Model {
             Logger.log("New user registered: " + user.username + ", ID=" + user.ID + ", IP=" + user.ipAddress);
         }
     }
-
-    // ===========================================================
-    // Methods for/from SuperClass/Interfaces
-    // ===========================================================
-
-    // ===========================================================
-    // Methods
-    // ===========================================================
 
     public static void unregisterUser(User user) {
         find.ref(user.ID).delete();
@@ -218,13 +231,7 @@ public class User extends Model {
 
     // -------- Utils ------------
 
-    public String getIpAddress() {
-        return this.ipAddress;
-    }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
 
     public void sendMessage(String kind, User from, String asText, Object... options) {
         if (this == SYSTEM || outSocket == null) {
