@@ -1,10 +1,7 @@
 package chatterbox.utils;
 
-import org.fusesource.jansi.AnsiConsole;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,6 +9,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import org.fusesource.jansi.AnsiConsole;
 
 public class Logger implements Runnable {
 	
