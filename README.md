@@ -5,7 +5,7 @@ Chatterbox
 
 - [MySQL server] (http://www.sitepoint.com/how-to-install-mysql/)
 - [Play Framework] (http://www.playframework.org/documentation/2.0.4/Installing)
-- [Intellij (Optional)] (http://www.jetbrains.com/idea/)
+- [Intellij (Optional, but highly recommended)] (http://www.jetbrains.com/idea/)
 
 
 ##Running
@@ -16,12 +16,10 @@ Chatterbox
 
 ### Debugging with Intellij
 
-- Start play application using `play debug`
-- In Intellij, click the debug button. Debug Configurations window should pop up.
-- Add new `Remote` configuration.
-- Set port to `9999`, Module to `Web-Chatterbox`
-- Leave everything else at default.
-- Save and run.
+- Make sure play framework and play 2.0 plug-ins are installed.
+- Open pre-made project from source folder.
+- Click the bug next to the play button. 
+- New instance of play server will run.
 
 
 ##Contributing
