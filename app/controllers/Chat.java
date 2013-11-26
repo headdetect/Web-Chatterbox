@@ -31,7 +31,7 @@ public class Chat extends Controller {
         //Only username and pass are not null
 		User user = mForm.get();
 
-		user.setIpAddress(request().remoteAddress());
+		user.ipAddress = request().remoteAddress();
 
         if ( user.username == null || user.username.trim().equals( "" ) ) {
             flash( "error", "Please enter a valid username." );

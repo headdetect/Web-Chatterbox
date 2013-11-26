@@ -17,8 +17,8 @@ Chatterbox
 ### Debugging with Intellij
 
 - Make sure play framework and play 2.0 plug-ins are installed.
-- Open pre-made project from source folder.
-- Click the bug next to the play button. 
+- Make new project with this source.
+- Click the bug next to the play button when project is all loaded.
 - New instance of play server will run.
 
 

@@ -17,7 +17,6 @@ target
 tmp
 test-result
 server.pid
-*.iml
 *.eml
 /RUNNING_PID
 /run.bat

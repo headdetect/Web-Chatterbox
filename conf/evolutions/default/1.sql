@@ -11,7 +11,6 @@ create table o_users (
   permission                integer,
   use_full_time             tinyint(1) default 0,
   show_emotes               tinyint(1) default 0,
-  ip_address                varchar(255),
   constraint ck_o_users_permission check (permission in (0,1,2,3,4)),
   constraint pk_o_users primary key (id))
 ;
