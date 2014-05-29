@@ -1,0 +1,70 @@
+@(connected: String, whichActive: String = "home")(content: Html)
+
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>ChatterBox</title>
+        <script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+
+        
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-responsive.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        
+        <!-- Shame IE, I expect more from you. LOL, not really. -->
+	    <!--[if lt IE 9]>
+	      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
+        
+    </head>
+    <body>
+    
+	      <div class="navbar navbar-inverse navbar-fixed-top">
+	      <div class="navbar-inner">
+	        <div class="container">
+	        
+	          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          
+	          <a class="brand" href="@routes.Application.index()">ChatterBox</a>
+	          <div class="nav-collapse collapse">
+	            <ul class="nav">
+	               @if(connected != null) {
+	               <li class='active profile'>
+                            Logged in as @connected
+                            <a href="@routes.Application.index()">Disconnect</a>
+                   </li>
+                   }
+	              <li class='@{ if (whichActive.equals("home")) "active" else ""} '>
+	                <a href="@routes.Application.index()">Home</a>
+	              </li>
+	              <li class='@{if (whichActive.equals("people")) "active" else ""} '>
+	                <a href="@routes.Application.index()">Peoples</a>
+	              </li>
+	              <li class='@{ if(whichActive.equals("history")) "active" else ""} '>
+	                <a href="@routes.Application.index()">History</a>
+	              </li>
+	            </ul>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+
+        <div class="container">
+
+            <div class="content">
+                @content
+            </div>
+
+        </div>
+        
+
+    </body>
+</html>

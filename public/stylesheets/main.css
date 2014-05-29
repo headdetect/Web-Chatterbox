@@ -1,0 +1,575 @@
+@import url(http://fonts.googleapis.com/css?family=Lato);
+
+html, body {
+    background-color: #eee;
+}
+body {
+    padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+    height: 100%;
+
+    overflow: hidden;
+}
+.container > footer p {
+    text-align: center; /* center align it with the container */
+}
+
+.container {
+    width: 70%;
+}
+
+
+/* The white background content wrapper */
+.content {
+    background-color: #fff;
+    padding: 20px;
+    margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+    -webkit-border-radius: 0 0 6px 6px;
+       -moz-border-radius: 0 0 6px 6px;
+            border-radius: 0 0 6px 6px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+            box-shadow: 0 1px 2px rgba(0,0,0,.15);
+
+
+}
+
+/* Page header tweaks */
+.page-header {
+	position: fixed;
+	width: 100%;
+	top: 20px;
+
+    background-color: #f5f5f5;
+
+    -webkit-box-shadow: 0 0 2px 2px rgba(0,0,0,.15);
+       -moz-box-shadow: 0 0 2px 2px rgba(0,0,0,.15);
+            box-shadow: 0 0 2px 2px rgba(0,0,0,.15);
+
+    z-index: 1;
+}
+
+.page-header h4,
+.page-header #prog {
+    padding: 15px 10px 5px 10px;
+}
+
+#chat-container {
+	position: absolute;
+	bottom: 60px;
+	left: 0px;
+	right: 260px;
+	top: 110px;
+
+	overflow-y: scroll;
+}
+
+
+#main {
+    position: relative;
+    overflow: hidden;
+}
+
+#onError, #onChat {
+    display: none;
+    overflow: auto;
+}
+
+#members {
+	overflow-y: auto;
+}
+
+#members-col {
+	position: fixed;
+	width: 260px;
+	right: 0;
+	top: 110px;
+	bottom: 0;
+
+
+	background-color: #eee;
+
+}
+
+
+#chatarea {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 260px;
+
+    height: 50px;
+
+    background: #ccc;
+
+    padding: 5px;
+}
+
+#chatarea textarea {
+	position: absolute;
+	width: 89.5%;
+}
+
+#chatarea button {
+	position: absolute;
+	right: 5px;
+	width: 8%;
+	height: 48px;
+
+
+}
+
+#chat-list .message-line {
+    padding: 0;
+    margin: 0;
+
+    position: relative;
+
+    border-color: inherit;
+    border-collapse: inherit;
+
+	min-height: 60px;
+}
+
+#chat-list .message-line table td,
+#chat-list .message-line table th {
+    border-top: inherit;
+}
+
+#chat-list .message-line .usr {
+    position: absolute;
+    left: -16px;
+    top: 0;
+
+    width: 150px;
+    overflow: hidden;
+
+    display: inline-block;
+    vertical-align: top;
+    text-align: right;
+
+    font-family: "Lucida Grande", arial ,sans-serif;
+    font-weight: bold;
+    color: #444;
+    font-size: .9em;
+
+    border-right: 1px solid #fdfdfd;
+
+    background: #f3f3f3;
+	
+	min-height: 25px;
+}
+
+#chat-list .message-line .msg {
+    position: absolute;
+    left: 151px;
+    right: 0;
+    top: 0;
+
+    padding-right: 55px;
+
+    display: inline-block;
+    margin: 0;
+    word-break: break-word;
+
+    border-left: 1px solid #ddd;
+    background: #fff;
+	
+	min-height: 25px;
+
+}
+
+#chat-list .message-line .time {
+    position: relative;
+    float: right;
+
+    background: transparent;
+
+    color: #999;
+    font-size: .75em;
+}
+
+#chat-list .message-line.me .usr {
+    border-right: 1px solid #EFEBF5;
+    border-top: 1px solid #D8D3DE;
+    background: #E8E1F0;
+}
+
+#chat-list .message-line.me .msg {
+    border-left: 1px solid #D8D3DE;
+    background: #F4F0FA;
+}
+
+
+/* Message stuffs
+
+.message-line {
+    padding: 0;
+    margin: 0;
+
+    height: auto;
+
+    border-top: 1px solid #bbb;
+
+    position: relative;
+}
+
+/* Author of message
+.message-line span {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 150px;
+    overflow: hidden;
+
+    text-align: right;
+
+    display: inline-block;
+    vertical-align: top;
+
+    font-family: "Lato";
+    font-weight: bold;
+
+    border-right: 1px solid #fdfdfd;
+    border-top: 1px solid #fdfdfd;
+
+    background: #f3f3f3;
+
+}
+
+.message-line p {
+    position: absolute;
+    left: 151px;
+    right: 0;
+    top: 0;
+
+	display: inline-block;
+    margin: 0;
+    word-break: break-all;
+
+    border-left: 1px solid #bbb;
+    background: #fff;
+
+    padding: 10px;
+
+}
+
+.message-line small {
+	float: right;
+	padding-right: 8px;
+}
+
+
+.message-line.me {
+    border-top: 1px solid #D8D3DE;
+}
+
+.message-line.me span {
+    border-right: 1px solid #EFEBF5;
+    border-top: 1px solid #EFEBF5;
+
+    background: #E8E1F0;
+
+
+}
+
+.message-line.me p {
+    border-left: 1px solid #D8D3DE;
+
+    background: #F4F0FA;
+}
+
+
+*/
+
+
+/* Tweak navbar brand link to be pimp.
+-------------------------------------------------- */
+
+body > .navbar {
+  font-size: 13px;
+}
+
+body > .navbar .brand {
+  padding-right: 0;
+  padding-left: 0;
+  margin-left: 20px;
+  float: right;
+  font-weight: bold;
+  color: #ccc;
+  text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
+  -webkit-transition: all .2s linear;
+     -moz-transition: all .2s linear;
+          transition: all .2s linear;
+}
+body > .navbar .brand:hover {
+  text-decoration: none;
+  text-shadow: 0 1px 0 rgba(100,255,100,.1), 0 0 30px rgba(100,255,100,.7);
+}
+
+/* Signin page goodness */
+
+.fieldset-signin {
+        max-width: 300px;
+        padding: 19px 29px 29px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.fieldset-signin .fieldset-signin-heading,
+.fieldset-signin .checkbox {
+        margin-bottom: 10px;
+}
+
+.fieldset-signin input[type="text"],
+.fieldset-signin input[type="password"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 5px;
+        padding: 7px 9px;
+}
+
+
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+
+body {
+    padding-bottom: 40px;
+    color: #5a5a5a;
+}
+
+
+
+/* CUSTOMIZE THE NAVBAR
+-------------------------------------------------- */
+
+/* Special class on .container surrounding .navbar, used for positioning it into place. */
+.navbar-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin-top: 20px;
+    margin-bottom: -90px; /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */
+}
+.navbar-wrapper .navbar {
+
+}
+
+/* Remove border and change up box shadow for more contrast */
+.navbar .navbar-inner {
+    border: 0;
+    -webkit-box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    -moz-box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    box-shadow: 0 2px 10px rgba(0,0,0,.25);
+}
+
+/* Downsize the brand/project name a bit */
+.navbar .brand {
+    padding: 14px 20px 16px; /* Increase vertical padding to match navbar links */
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0,0,0,.5);
+}
+
+/* Navbar links: increase padding for taller navbar */
+.navbar .nav > li > a {
+    padding: 15px 20px;
+}
+
+/* Offset the responsive button for proper vertical alignment */
+.navbar .btn-navbar {
+    margin-top: 10px;
+}
+
+
+
+/* CUSTOMIZE THE NAVBAR
+-------------------------------------------------- */
+
+/* Carousel base class */
+.carousel {
+    margin-bottom: 60px;
+}
+
+.carousel .container {
+    position: relative;
+    z-index: 9;
+}
+
+.carousel-control {
+    height: 80px;
+    margin-top: 0;
+    font-size: 120px;
+    text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    background-color: transparent;
+    border: 0;
+}
+
+.carousel .item {
+    height: 500px;
+}
+.carousel img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    height: 500px;
+}
+
+.carousel-caption {
+    background-color: transparent;
+    position: static;
+    max-width: 550px;
+    padding: 0 20px;
+    margin-top: 200px;
+}
+.carousel-caption h1,
+.carousel-caption .lead {
+    margin: 0;
+    line-height: 1.25;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,.4);
+}
+.carousel-caption .btn {
+    margin-top: 10px;
+}
+
+
+
+/* MARKETING CONTENT
+-------------------------------------------------- */
+
+/* Center align the text within the three columns below the carousel */
+.marketing .span4 {
+    text-align: center;
+}
+.marketing h2 {
+    font-weight: normal;
+}
+.marketing .span4 p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+/* Featurettes
+------------------------- */
+
+.featurette-divider {
+    margin: 80px 0; /* Space out the Bootstrap <hr> more */
+}
+.featurette {
+    padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
+    overflow: hidden; /* Vertically center images part 2: clear their floats. */
+}
+.featurette-image {
+    margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
+}
+
+/* Give some space on the sides of the floated elements so text doesn't run right into it. */
+.featurette-image.pull-left {
+    margin-right: 40px;
+}
+.featurette-image.pull-right {
+    margin-left: 40px;
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+    font-size: 50px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -1px;
+}
+
+
+
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+
+@media (max-width: 979px) {
+
+    .container.navbar-wrapper {
+        margin-bottom: 0;
+        width: auto;
+    }
+    .navbar-inner {
+        border-radius: 0;
+        margin: -20px 0;
+    }
+
+    .carousel .item {
+        height: 500px;
+    }
+    .carousel img {
+        width: auto;
+        height: 500px;
+    }
+
+    .featurette {
+        height: auto;
+        padding: 0;
+    }
+    .featurette-image.pull-left,
+    .featurette-image.pull-right {
+        display: block;
+        float: none;
+        max-width: 40%;
+        margin: 0 auto 20px;
+    }
+}
+
+
+@media (max-width: 767px) {
+
+    .navbar-inner {
+        margin: -20px;
+    }
+
+    .carousel {
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+    .carousel .container {
+
+    }
+    .carousel .item {
+        height: 300px;
+    }
+    .carousel img {
+        height: 300px;
+    }
+    .carousel-caption {
+        width: 65%;
+        padding: 0 70px;
+        margin-top: 100px;
+    }
+    .carousel-caption h1 {
+        font-size: 30px;
+    }
+    .carousel-caption .lead,
+    .carousel-caption .btn {
+        font-size: 18px;
+    }
+
+    .marketing .span4 + .span4 {
+        margin-top: 40px;
+    }
+
+    .featurette-heading {
+        font-size: 30px;
+    }
+    .featurette .lead {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+}

@@ -1,0 +1,48 @@
+@(userForm: Form[User])
+
+@import helper._
+
+@main(null) {
+   
+    @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+                <strong>Oops!</strong> @flash.get("error")
+        </div>
+    }
+     
+    @helper.form(action = routes.Chat.verify, 'class -> "fieldset-signin") {
+	    <fieldset>
+	    	<legend>Sign In</legend>
+			@helper.inputText(
+				userForm("username"),
+				'_label -> "",
+				'class -> "input-block-level",
+				'placeholder -> "Username"
+			)
+
+			@helper.inputPassword(
+				userForm("password"),
+				'_label -> "",
+				'class -> "input-block-level",
+				'placeholder -> "Password"
+			)
+	    </fieldset>
+
+	    <div class="actions">
+            <input type="submit" class="btn btn-primary" value="Sign In">
+        </div>
+    }
+    
+    <style type="text/css">
+    
+    	/* Makes for a nice image thingy */
+    	
+		html, body {
+		    background: url(@routes.Assets.at("images/bg.jpg"));
+		    background-size: 100%;
+		}
+		
+		
+    </style>
+    
+}
